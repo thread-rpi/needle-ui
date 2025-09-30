@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import './index.css'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 
 function Publications() {
