@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import './App.css'
+import './index.css'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 
 function Root() {
 
   return (
-    <div>
+    <div className = "p-4">
       This is the root 
     </div>
   )
