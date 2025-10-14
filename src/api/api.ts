@@ -1,6 +1,4 @@
-// api.ts
 import ky, { HTTPError } from "ky";
-import type { HealthResponse, HealthError } from "../types/queryTypes";
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_TIMEOUT = 5000

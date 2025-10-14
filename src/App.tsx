@@ -6,6 +6,7 @@ import Publications from "./Publications";
 import Calendar from "./Calendar";
 import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Health from './Health';
 
 function App() {
 
@@ -27,26 +28,24 @@ function App() {
     },
   })
 
-
   return (
     <QueryClientProvider client={queryClient}>
-    <div>
       <BrowserRouter>
-        <nav className = "flex justify-end gap-4 p-4">
+        <nav className = "flex justify-end gap-4 p-4 z-75">
           <Link to="/aboutUs">About Us </Link>
-          <Link to = "/features">Features </Link>
+          <Link to = "/featured">Featured </Link>
           <Link to = "publications">Publications </Link>
           <Link to = "calendar">Calendar</Link>
         </nav>
         <Routes>
           <Route path="/aboutUs" element={<About />} />
           <Route path="/" element={<Root />} />
-          <Route path = "/features" element = {<Features/>}/>
-          <Route path = "/publications" element = {<Publications/>}/>
-          <Route path = "/calendar" element = {<Calendar/>}/>
+          <Route path = "/features" element={<Features />}/>
+          <Route path = "/publications" element={<Publications />}/>
+          <Route path = "/calendar" element={<Calendar />}/>
+          <Route path = "/health" element={<Health />}/>
         </Routes>
       </BrowserRouter>
-    </div>
     </QueryClientProvider>
   );
 }

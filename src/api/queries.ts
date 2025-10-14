@@ -1,4 +1,3 @@
-// hooks.ts
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { apiGet } from "./api";
 import type { HealthError, HealthResponse } from "../types/queryTypes";
