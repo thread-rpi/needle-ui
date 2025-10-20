@@ -1,7 +1,5 @@
-import { useState } from 'react'
-import './index.css'
 
-function Features() {
+const Features = () => {
 
   return (
     <div className = "p-4">
@@ -9,5 +7,4 @@ function Features() {
     </div>
   )
 }
-
 export default Features;
