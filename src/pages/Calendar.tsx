@@ -1,7 +1,5 @@
-import { useState } from 'react'
-import '../index.css'
 
-function Calendar() {
+const Calendar = () => {
 
   return (
     <div className = "p-4">
@@ -9,5 +7,4 @@ function Calendar() {
     </div>
   )
 }
-
 export default Calendar;
