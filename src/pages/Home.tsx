@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import { useState } from "react";
 import RecentEventsPopup from "../components/RecentEventsPopup";
 import LoopTap from "../assets/LoopTap.svg";
@@ -46,6 +47,26 @@ const RecentEventsPopup = ({ name, date, isOpen }: recentEventsPopupProps) => {
     return null; // Don't render component if it's not open
   }
   return (
+=======
+import { useNavigate } from 'react-router-dom';
+import '../index.css'
+import landingPage from '../assets/landingPage.png'
+import { useState } from 'react';
+
+// props for recentEventsPopup component
+interface recentEventsPopupProps {
+  name: string;
+  date: string;
+  isOpen: boolean; // check if closed/inactive or open/active
+}
+
+// recentEventsPopup component
+const RecentEventsPopup = ({ name, date, isOpen }: recentEventsPopupProps) => {
+  if (!isOpen) {
+    return null; // Don't render component if it's not open
+  }
+  return (
+>>>>>>> Stashed changes
     <div>
       <h1>{name}</h1>
       <h2>{date}</h2>
@@ -129,6 +150,9 @@ function Home() {
     </>
   )
 }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 export default Home;
