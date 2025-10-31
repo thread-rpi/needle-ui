@@ -1,27 +1,17 @@
 import { useState } from "react";
 import RecentEventsPopup from "../components/RecentEventsPopup";
 import LoopTap from "../assets/LoopTap.svg";
-
+import ParentComponent from "../components/buttons/ParentComponent"
 const Home = () => {
   const [open, setOpen] = useState(false);
-
-  const handleClick = () => setOpen(!open);
-
+  const [showTheLoop, setTheLoop] = useState(true);
+  const handleClick = () => {
+    setOpen(!open);
+    setTheLoop(true);
+  }
   return (
     <div className="relative w-full h-screen">
-      <button
-        onClick={handleClick}
-        className="absolute cursor-pointer z-10"
-        style={{
-          right: '0%',
-          top: '73.4%',
-          height: '23.22vh',
-          width: 'auto',
-        }}
-      >
-        <img src={LoopTap} alt="The Loop" className="w-auto h-full" />
-      </button>
-
+      <ParentComponent onLoopTapClick = {handleClick}/>
       <RecentEventsPopup isOpen={open} />
     </div>
   );

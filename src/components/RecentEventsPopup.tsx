@@ -1,7 +1,6 @@
 import RecentEventCard from './RecentEventCard'
 import { useRecentEvents } from "../api/queries";
 
-
 // props for recentEventsPopup component
 interface RecentEventsPopupProps {
   isOpen: boolean; // check if closed/inactive or open/active
@@ -16,26 +15,22 @@ const RecentEventsPopup = ({ isOpen }: RecentEventsPopupProps) => {
   }
 
   if(isLoading){
-    return <div>Loading recent events...</div>
+    //return <div>Loading recent events...</div>
   }
   
   if(isError){
-    return <div>Error: {error.message}</div>;
+    //return <div>Error: {error.message}</div>;
   }
 
   return (
-    // render a RecentEventCard component for each recentEvent object retrieved
-    <div className="recent-events">
-      {recentEvents?.map((recentEvent) => (
-        <RecentEventCard
-         key={recentEvent.id} 
-         title = {recentEvent.title}
-         date = {recentEvent.date}
-         type = {recentEvent.type} />
-      ))}
+    <div>
+      
     </div>
   );
 };
 
 
 export default RecentEventsPopup;
+
+
+

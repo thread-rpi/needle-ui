@@ -28,11 +28,14 @@ export const useGetHealth = (): UseQueryResult<HealthResponse, HealthError> => {
 }
 
 // query getRecentEvents api
-// doesn't actually query a valid api yet since the getRecentEvents endpoint hasn't been created yet
 async function getRecentEvents(): Promise<RecentEvent[]> {
-  return apiGet<RecentEvent[], { message: string }>({
-    endpoint: "api/getRecentEvents", 
-  });
+  try{
+    return await apiGet<RecentEvent[], { message: string }>({
+      endpoint: "api/getRecentEvents", 
+    });
+ } catch (err){
+  throw new Error("Could not query API.");
+ }
 };
 
 // getRecentEvents endpoint hook
