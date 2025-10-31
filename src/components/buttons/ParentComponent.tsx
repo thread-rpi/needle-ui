@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import ClosedRecentlyButton from "./ClosedRecently"
 import OpenRecentlyButton from "./OpenRecently";

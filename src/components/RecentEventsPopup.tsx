@@ -1,4 +1,3 @@
-import RecentEventCard from './RecentEventCard'
 import { useRecentEvents } from "../api/queries";
 
 // props for recentEventsPopup component
@@ -8,7 +7,7 @@ interface RecentEventsPopupProps {
 
 // recentEventsPopup component
 const RecentEventsPopup = ({ isOpen }: RecentEventsPopupProps) => {
-   const { data: recentEvents, isLoading, isError, error } = useRecentEvents(isOpen);
+   const {isLoading, isError} = useRecentEvents(isOpen);
 
   if (!isOpen) {
     return null; 
@@ -24,7 +23,6 @@ const RecentEventsPopup = ({ isOpen }: RecentEventsPopupProps) => {
 
   return (
     <div>
-      
     </div>
   );
 };

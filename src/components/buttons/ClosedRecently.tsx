@@ -1,4 +1,3 @@
-import React from 'react';
 import LoopTap from "../../assets/LoopTap.svg"
 
 type Props = {
