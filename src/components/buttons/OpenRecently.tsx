@@ -1,21 +1,22 @@
-import Recently from "../../assets/Recently.svg"
+import Recently from "../../assets/Recently.svg";
 
-export default function OpenRecentlyButton(){
-
-    return (
-        <div>
-        <button
-            className="absolute"
-            style={{
-            right: '0%',
-            top: '30.4%',
-            height: '60.22vh',
-            width: 'auto'
-            }}
-        >
-            <img src={Recently} alt="Recently" className="w-auto h-full" />
-        </button>
-
-  </div>
-    )
+export default function OpenRecentlyButton() {
+  return (
+    <div
+      className="fixed"
+      style={{
+        top: "min(21.2vh, 190px)",
+        right: "0vw",
+      }}
+    >
+      <img
+        src={Recently}
+        alt="Recently"
+        className="h-auto object-contain"
+        style={{
+          width: "19vw", 
+        }}
+      />
+    </div>
+  );
 }
