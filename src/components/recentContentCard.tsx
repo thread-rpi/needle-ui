@@ -32,7 +32,7 @@ export const RecentContentCard = ({ title, type, date }: RecentContentCardProps)
             </div>
             <h3 className="text-xl md:text-[36px] font-bold">{title}</h3>
           </div>
-          {/* <p className="text-sm text-gray-500">{new Date(date).toLocaleDateString()}</p> */}
+          <p className="hidden text-sm text-gray-500">{new Date(date).toLocaleDateString()}</p>
         </div>
     </div>
   )
