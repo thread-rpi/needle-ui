@@ -37,42 +37,42 @@ export const generateCardGrid = (content: typeof recentContent): GridRow[] => {
     if (cyclePosition === 1) {
       // Card 1, 11, 21, etc.
       width = "w-full";
-      height = isFirstCycle ? "h-[400px]" : "h-[200px]"; // h and 1/2h
+      height = isFirstCycle ? "h-[500px]" : "h-[250px]"; // h and 1/2h
       shouldStartNewRow = true;
     } else if (cyclePosition === 2 || cyclePosition === 3) {
       // Cards 2-3, 12-13, 22-23, etc.
       if (cyclePosition === 2) {
-        width = "w-[calc(33.333%-5.333px)]"; // 1/3w minus proportional gap (16px * 1/3)
+        width = "w-[calc(33.333333%-13.333px)]"; // 1/3w minus proportional gap (40px * 1/3)
         shouldStartNewRow = true;
       } else {
-        width = "w-[calc(66.667%-10.667px)]"; // 2/3w minus proportional gap (16px * 2/3)
+        width = "w-[calc(66.666667%-26.667px)]"; // 2/3w minus proportional gap (40px * 2/3)
       }
-      height = isFirstCycle ? "h-[400px]" : "h-[200px]";
+      height = isFirstCycle ? "h-[500px]" : "h-[200px]";
     } else if (cyclePosition === 4) {
       // Card 4, 14, 24, etc.
       width = "w-full";
-      height = "h-[200px]"; // 1/2h
+      height = "h-[250px]"; // 1/2h
       shouldStartNewRow = true;
     } else if (cyclePosition === 5 || cyclePosition === 6) {
       // Cards 5-6, 15-16, 25-26, etc.
       if (cyclePosition === 5) {
-        width = "w-[calc(66.667%-10.667px)]"; // 2/3w minus proportional gap (16px * 2/3)
+        width = "w-[calc(66.666667%-26.667px)]"; // 2/3w minus proportional gap (40px * 2/3)
         shouldStartNewRow = true;
       } else {
-        width = "w-[calc(33.333%-5.333px)]"; // 1/3w minus proportional gap (16px * 1/3)
+        width = "w-[calc(33.333333%-13.333px)]"; // 1/3w minus proportional gap (40px * 1/3)
       }
-      height = "h-[200px]"; // 1/2h
+      height = "h-[250px]"; // 1/2h
     } else if (cyclePosition >= 7 && cyclePosition <= 9) {
       // Cards 7-9, 17-19, 27-29, etc.
       if (cyclePosition === 7) {
         shouldStartNewRow = true;
       }
-      width = "w-[calc(33.333%-10.667px)]"; // 1/3w minus proportional gap (32px total / 3 cards = 10.667px each)
-      height = "h-[200px]"; // 1/2h
+      width = "w-[calc(33.333333%-26.667px)]"; // 1/3w minus proportional gap (80px total / 3 cards = 26.667px each)
+      height = "h-[250px]"; // 1/2h
     } else if (cyclePosition === 10) {
       // Card 10, 20, 30, etc.
       width = "w-full";
-      height = "h-[200px]"; // 1/2h
+      height = "h-[250px]"; // 1/2h
       shouldStartNewRow = true;
     } else {
       width = "w-full";
@@ -88,5 +88,32 @@ export const generateCardGrid = (content: typeof recentContent): GridRow[] => {
   }
   
   return rows;
+};
+
+/**
+ * Converts width classes to responsive versions for mobile and desktop.
+ * For fractional widths, uses flex-basis instead of width for better control in flexbox layouts.
+ */
+export const getResponsiveWidth = (width: string): string => {
+  // For fractional widths, use flex-basis instead of width for better control
+  // Use the exact width value from grid builder to preserve gap calculations
+  if (width.includes('33.333') && width.includes('26.667')) {
+    // 3-card rows: calc(33.333333%-26.667px)
+    return 'w-full md:flex-[0_0_calc(33.333333%-26.667px)] md:w-auto';
+  } else if (width.includes('33.333') && width.includes('13.333')) {
+    // 2-card rows (1/3): calc(33.333333%-13.333px)
+    return 'w-full md:flex-[0_0_calc(33.333333%-13.333px)] md:w-auto';
+  } else if (width.includes('66.667')) {
+    // 2-card rows (2/3): calc(66.666667%-26.667px)
+    return 'w-full md:flex-[0_0_calc(66.666667%-26.667px)] md:w-auto';
+  } else if (width.startsWith('w-[')) {
+    // Other arbitrary values
+    const value = width.substring(2);
+    return `w-full md:w-${value}`;
+  } else {
+    // Regular class: w-full
+    const mdWidth = width.replace('w-', 'md:w-');
+    return `w-full ${mdWidth}`;
+  }
 };
 

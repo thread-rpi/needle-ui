@@ -1,32 +1,20 @@
 import recentContent from "../helpers/recentContent.json";
-import { RecentContentCard } from "../components/recentContentCard";
+import { RecentContentCard } from "../components/RecentContentCard";
 import type { EventType } from "../types/eventTypes";
-import { generateCardGrid } from "../helpers/recentContentGrid";
+import { generateCardGrid, getResponsiveWidth } from "../helpers/recentContentGrid";
+import { RecentContentThread } from "../components/RecentContentThread";
 
 const Home = () => {
   const cardRows = generateCardGrid(recentContent);
 
-  // Helper to convert width class to responsive version
-  const getResponsiveWidth = (width: string) => {
-    // On mobile (default), always use w-full
-    // On md and above, use the original width
-    // Handle both regular classes (w-full) and arbitrary values (w-[calc(...)])
-    if (width.startsWith('w-[')) {
-      // Arbitrary value: w-[calc(...)] -> md:w-[calc(...)]
-      const value = width.substring(2); // Remove 'w-'
-      return `w-full md:w-${value}`;
-    } else {
-      // Regular class: w-full -> md:w-full
-      const mdWidth = width.replace('w-', 'md:w-');
-      return `w-full ${mdWidth}`;
-    }
-  };
-
   return (
-    <div className="w-full h-full pb-6 pt-20 overflow-x-hidden">
-      <div className="flex flex-col gap-4 max-w-7xl mx-auto px-7 lg:px-4 xl:px-0 w-full">
+    <div className="w-full h-full pb-6 pt-20 flex justify-center">
+      <RecentContentThread 
+        className="absolute -z-10 w-[128vw] shadow-[0_4px_7px_0_rgba(169,0,0,0.60)]"
+      />
+      <div className="flex flex-col gap-10 max-w-7xl mx-auto px-7 lg:px-4 xl:px-0 w-full">
         {cardRows.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex flex-col md:flex-row gap-4 w-full min-w-0">
+          <div key={rowIndex} className="flex flex-col md:flex-row gap-10 w-full min-w-0">
             {row.map(({ item, width, height }) => (
               <div key={item.id} className={`${getResponsiveWidth(width)} ${height} min-w-0`}>
                 <RecentContentCard 
@@ -39,6 +27,7 @@ const Home = () => {
           </div>
         ))}
       </div>
+      
     </div>
   )
 }
