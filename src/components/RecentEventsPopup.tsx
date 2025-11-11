@@ -5,59 +5,74 @@ interface RecentEventsPopupProps {
 }
 
 export default function RecentEventsPopup({ isOpen }: RecentEventsPopupProps) {
-  const { data: recentEvents, isLoading, isError, error } = useRecentEvents2(isOpen);
+  const { data: recentEvents, isLoading, isError, error } = useRecentEvents2(isOpen); // replace with useRecentEvents when getRecentEvents API is up
 
   if (!isOpen) return null;
-  if (isLoading) return <div >Loading...</div>;
-  if (isError) return <div >Error: {error.message}</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
 
-  // Base dimensions from Figma
-  const totalStackWidth = 275; // px
-  const middleButtonHeight = 80; // px
-  const otherButtonHeight = 50; // px
-  const buttonGap = 5; // px
+  // Fixed pixel dimensions from Figma
+  const totalStackWidth = 275;
+  const middleButtonHeight = 80;
+  const otherButtonHeight = 50;
+
+  const buttonGap = 26;
 
   return (
     <div
-      className="fixed flex flex-col z-50"
+      className="fixed z-50"
       style={{
-        top: "27.1vh",           // scales with screen height
-        right: "1vw",            // small offset from right
-        gap: `${(buttonGap / 500) * 100}vh`, // gap scaling
+        top: "290px",
+        right: "80px",
+        width: `${totalStackWidth}px`,
       }}
     >
       {recentEvents?.slice(0, 7).map((event, index) => {
-        // Width scales with viewport width
-        const widthVW = (totalStackWidth / 1440) * 100; // vw percentage
-        const heightVH =
-          index === 3
-            ? (middleButtonHeight / 900) * 100
-            : (otherButtonHeight / 900) * 100;
+        let isMiddle = false;
+        let height = otherButtonHeight;
 
-        // Colors & text
+        if (index === 3) {
+          isMiddle = true;
+          height = middleButtonHeight;
+        }
+
+        let scale = 1.2;
+        
+        // original CSS styling for the first three buttons
         let bgColor = "bg-black";
-        let hoverColor = "hover:bg-gray-800";
         let textColor = "text-white";
+        let shadowClass = "";
 
+        // CSS styling for last three buttons
         if (index > 3) {
           bgColor = "bg-white";
-          hoverColor = "hover:bg-gray-200";
           textColor = "text-black";
-        } else if (index === 3) {
+        }
+        // CSS styling for middle button
+
+        if (isMiddle) {
           bgColor = "bg-[#FF0000]";
-          hoverColor = "hover:bg-[#CC0000]";
           textColor = "text-white";
+          shadowClass = "shadow-[0px_-1px_6px_1px_rgba(255,0,0,0.91)]";
+          scale = 1.3
+        }
+
+        // Control space under each button until the last
+        let marginBottom = '0';
+        if (index < 6) {
+          marginBottom = `${buttonGap}px`;
         }
 
         return (
           <button
             key={event.id}
-            style={{ width: `${widthVW}vw`, height: `${heightVH}vh` }}
-            className={`
-              flex items-center justify-center
-              rounded-full
-              ${bgColor} ${hoverColor} ${textColor}
-            `}
+            style={{
+              width: `${totalStackWidth}px`,
+              height: `${height}px`,
+              transform: `scale(${scale})`,
+              marginBottom: marginBottom,
+            }}
+            className={`flex items-center justify-center rounded-[40.5948px] ${bgColor} ${textColor} ${shadowClass}`}
           >
           </button>
         );

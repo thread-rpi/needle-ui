@@ -48,6 +48,9 @@ export const useRecentEvents = (isOpen: boolean) => { // query only if RecentEve
 };
 
 
+
+
+// Dummy data, delete and replace with getRecentEvents after the getRecentEvents API works
 export const getRecentEvents2 = async (isOpen: boolean) => {
   if (!isOpen) return [];
 
@@ -60,45 +63,46 @@ export const getRecentEvents2 = async (isOpen: boolean) => {
       date: new Date().toISOString(),
       type: "info",
     },
-    {
-      id: "evt-002",
-      title: "New user registered",
-      date: new Date(Date.now() - 3600 * 1000).toISOString(),
-      type: "success",
+   {
+      id: "evt-001",
+      title: "System rebooted",
+      date: new Date().toISOString(),
+      type: "info",
     },
-    {
-      id: "evt-003",
-      title: "High memory usage detected",
-      date: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
-      type: "warning",
+   {
+      id: "evt-001",
+      title: "System rebooted",
+      date: new Date().toISOString(),
+      type: "info",
     },
-    {
-      id: "evt-004",
-      title: "Database connection failed",
-      date: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
-      type: "error",
+   {
+      id: "evt-001",
+      title: "System rebooted",
+      date: new Date().toISOString(),
+      type: "info",
     },
-    {
-    id: "evt-004",
-      title: "Database connection failed",
-      date: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
-      type: "error",
+   {
+      id: "evt-001",
+      title: "System rebooted",
+      date: new Date().toISOString(),
+      type: "info",
     },
-    {
-    id: "evt-004",
-      title: "Database connection failed",
-      date: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
-      type: "error",
+   {
+      id: "evt-001",
+      title: "System rebooted",
+      date: new Date().toISOString(),
+      type: "info",
     },
-    {
-    id: "evt-004",
-      title: "Database connection failed",
-      date: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
-      type: "error",
+   {
+      id: "evt-001",
+      title: "System rebooted",
+      date: new Date().toISOString(),
+      type: "info",
     },
   ];
 };
 
+// function to use dummy data from getRecentEvents (delete after getRecentEvents API is up)
 export const useRecentEvents2 = (isOpen: boolean) => {
   return useQuery({
     queryKey: ["getRecentEvents2"],

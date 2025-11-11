@@ -7,7 +7,7 @@ const Home = () => {
     setOpen(!open);
   }
   return (
-    <div className="relative w-full h-screen bg-blue-500">
+    <div className="relative w-full h-screen bg-blue-200">
       <ParentComponent onLoopTapClick = {handleClick}/>
       <RecentEventsPopup isOpen={open} />
     </div>
