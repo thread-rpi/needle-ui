@@ -1,10 +1,18 @@
+import type { RecentContent } from "./eventTypes";
+
+// generic endpoint error response
+export interface EndpointError {
+  status: number;
+  error: string;
+};
+
 // Health endpoint healthy response
 export type HealthResponse = {
     data: 'healthy';
 };
 
-// Health endpoint error response
-export type HealthError = {
-    status: number;
-    error: string;
-};
+// recentContent healthy response
+export type RecentContentResponse = {
+  data: RecentContent[];
+}
+

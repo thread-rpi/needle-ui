@@ -1,21 +1,44 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { apiGet } from "./api";
-import type { HealthError, HealthResponse } from "../types/queryTypes";
+import type { EndpointError, HealthResponse, RecentContentResponse } from "../types/queryTypes";
+import recentContent from "../helpers/recentContent.json";
+import type { RecentContent } from "../types/eventTypes";
 
+// REQUESTS ////////////////////////////////////////////////////////////
 
 // health endpoint request
 async function getHealth(): Promise<HealthResponse> {
   try {
-    return apiGet<HealthResponse, HealthError>({endpoint: 'health'});
+    return apiGet<HealthResponse, EndpointError>({endpoint: 'health'});
   } catch (err) {
-    throw err as HealthError;
+    throw err as EndpointError;
   }
 }
 
+// recentContent endpoint request
+async function getRecentContent(): Promise<RecentContentResponse> {
+  try {
+    // return apiGet<RecentContentResponse, EndpointError>({endpoint: 'events/recentContent'});
+    return { data: recentContent as unknown as RecentContent[] };
+  } catch (err) {
+    throw err as EndpointError;
+  }
+}
+
+// HOOKS //////////////////////////////////////////////////////////////
+
 // Health endpoint hook 
-export const useGetHealth = (): UseQueryResult<HealthResponse, HealthError> => {
-  return useQuery<HealthResponse, HealthError>({
+export const useGetHealth = (): UseQueryResult<HealthResponse, EndpointError> => {
+  return useQuery<HealthResponse, EndpointError>({
     queryKey: ["health"],
     queryFn: () => getHealth()
+  });
+}
+
+// recentContent endpoint hook 
+export const useGetRecentContent = (): UseQueryResult<RecentContentResponse, EndpointError> => {
+  return useQuery<RecentContentResponse, EndpointError>({
+    queryKey: ["recentContent"],
+    queryFn: () => getRecentContent()
   });
 }
