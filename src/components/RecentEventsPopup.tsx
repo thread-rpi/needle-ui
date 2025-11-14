@@ -1,11 +1,11 @@
-import { useRecentEvents2 } from "../api/queries";
+import { useRecentEvents } from "../api/queries";
 
 interface RecentEventsPopupProps {
   isOpen: boolean;
 }
 
 export default function RecentEventsPopup({ isOpen }: RecentEventsPopupProps) {
-  const { data: recentEvents, isLoading, isError, error } = useRecentEvents2(isOpen); // replace with useRecentEvents when getRecentEvents API is up
+  const { data: recentEvents, isLoading, isError, error } = useRecentEvents(isOpen);
 
   if (!isOpen) return null;
   if (isLoading) return <div>Loading...</div>;
@@ -72,7 +72,7 @@ export default function RecentEventsPopup({ isOpen }: RecentEventsPopupProps) {
               transform: `scale(${scale})`,
               marginBottom: marginBottom,
             }}
-            className={`flex items-center justify-center rounded-[40.5948px] ${bgColor} ${textColor} ${shadowClass}`}
+            className={`flex items-center justify-center rounded-[30.5948px] ${bgColor} ${textColor} ${shadowClass}`}
           >
           </button>
         );
