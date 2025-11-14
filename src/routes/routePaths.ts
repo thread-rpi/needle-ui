@@ -4,3 +4,4 @@ export const featuresPath = '/features'
 export const publicationsPath = '/publications';
 export const calendarPath = "/calendar";
 export const healthPath = "/health";
+    
