@@ -5,16 +5,15 @@ import headerLogo from "../assets/header-logo.svg";
 export default function Header() {
   const navigate = useNavigate();
 
-  // one source of truth for the nav items
+  //one source of truth for the nav items
   const items: { label: string; to: string; offset: string }[] = [
     { label: "About Us", to: "/about", offset: "12%" },
     { label: "Featured", to: "/features", offset: "36%" },
     { label: "Calendar", to: "/calendar", offset: "58%" },
     { label: "Publications", to: "/publications", offset: "78%" },
   ];
-
   return (
-    <header className="relative w-full h-[200px] md:h-[250px] lg:h-[300px] overflow-hidden">
+    <header className="z-200 w-full h-max fixed top-0 left-0 flex md:h-[250px] lg:h-[300px] overflow-hidden">
       {/* background ribbon svg */}
       <img
         src={headerBg}
