@@ -1,6 +1,6 @@
 import type { EventType } from "../types/eventTypes";
 import { generateCardGrid, getResponsiveWidth } from "../helpers/recentContentGrid";
-import { RecentContentThread } from "../components/RecentContentThread";
+// import { RecentContentThread } from "../components/RecentContentThread";
 import { useGetRecentContent } from "../api/queries";
 import { RecentContentCard } from "../components/recentContentCard";
 
