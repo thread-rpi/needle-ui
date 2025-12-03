@@ -1,87 +1,54 @@
 import { useNavigate } from "react-router-dom";
-import headerBg from "../assets/header-bg.svg";
 import headerLogo from "../assets/header-logo.svg";
+import { routes } from "../routes/routePaths";
+
+const headerRoutes = [
+  { label: "About Us", path: routes.about, offset: "9%" },
+  { label: "Featured", path: routes.features, offset: "32%" },
+  { label: "Calendar", path: routes.calendar, offset: "55%" },
+  { label: "Publications", path: routes.publications, offset: "75%" },
+];
 
 export default function Header() {
   const navigate = useNavigate();
 
-  //one source of truth for the nav items
-  const items: { label: string; to: string; offset: string }[] = [
-    { label: "About Us", to: "/about", offset: "12%" },
-    { label: "Featured", to: "/features", offset: "36%" },
-    { label: "Calendar", to: "/calendar", offset: "58%" },
-    { label: "Publications", to: "/publications", offset: "78%" },
-  ];
   return (
-    <header className="z-200 w-full h-max fixed top-0 left-0 flex md:h-[250px] lg:h-[300px] overflow-hidden">
-      {/* background ribbon svg */}
-      <img
-        src={headerBg}
-        alt="Header background shape"
-        className="absolute z-0 object-contain"
-        style={{
-          top: "0%",
-          right: "0",
-          width: "50vw",
-          height: "auto",
-        }}
-      />
+    <header className="z-200 w-full h-[130px] fixed top-0 left-0 flex flex-row items-start justify-between overflow-hidden ">
 
       {/* logo */}
-      <img
-        src={headerLogo}
-        alt="Thread logo"
-        className="absolute z-20 object-contain"
-        style={{
-          left: "2%",
-          width: "58px",
-          height: "60px",
-          top: "10%",
-        }}
-      />
+      <img src={headerLogo} alt="Thread logo" className="z-20 w-max h-auto object-contain object-center px-5 py-4.5"/>
 
-      {/* curved nav text */}
-      <svg
-        className="absolute z-30 pointer-events-auto"
-        viewBox="87 45 800 200"
-        style={{
-          top: 0,
-          right: "-8%",
-          width: "50vw",
-          height: "100%",
-        }}
-      >
-        {/* path the text follows */}
-        <path
-          id="header-curve"
-          fill="none"
-          stroke="transparent"
-          strokeWidth="50"
-          d="M25.4723 -14.0002C105.972 121 458.801 45.6849 568.972 60.4998C679.143 75.3147 684.472 105 747.972 105"
-        />
-
-        <text
-          className="select-none"
-          style={{
-            fontSize: "14px",
-            fill: "#FFFFFF",
-            fontWeight: 600,
-            transform: "translateY(12px)",
-          }}
-        >
-          {items.map((item) => (
-            <textPath
-              key={item.label}
-              href="#header-curve"
-              startOffset={item.offset}
-              onClick={() => navigate(item.to)}
-              style={{ cursor: "pointer" }}
+      
+      <div className="w-max h-auto relative">
+        {/* background ribbon svg */}
+        <svg xmlns="http://www.w3.org/2000/svg" width="714" height="142" viewBox="0 0 714 142" fill="none">
+          <g filter="url(#filter0_d_2551_474)">
+            <path id="header-thread" d="M28.3721 -17.7407C108.872 117.259 461.701 36.9444 571.872 56.7593C682.043 76.5742 687.372 108.259 750.872 108.259" stroke="#AF1E2D" stroke-width="50"/>
+            <text
+              className="select-none"
+              style={{
+                fontSize: "14px",
+                fill: "#FFFFFF",
+                fontWeight: 800,
+                dominantBaseline: "middle",
+              }}
             >
-              {item.label}
-            </textPath>
-          ))}
-        </text>
-      </svg>
+              {/* text path for each route */}
+              {headerRoutes.map((item) => (
+                <textPath
+                  key={item.label}
+                  href="#header-thread"
+                  startOffset={item.offset}
+                  onClick={() => navigate(item.path)}
+                  className="cursor-pointer"
+                >
+                  {item.label.toUpperCase()}
+                </textPath>
+              ))}
+            </text>
+          </g>
+        </svg>
+      </div>
     </header>
   );
 }

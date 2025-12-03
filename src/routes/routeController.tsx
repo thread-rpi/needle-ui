@@ -3,12 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loader from "../components/Loader";
 import {
-  rootPath,
-  aboutPath,
-  featuresPath,
-  publicationsPath,
-  calendarPath,
-  healthPath,
+  routes,
 } from "./routePaths";
 import Layout from "../pages/Layout";
 
@@ -24,13 +19,13 @@ export default function RouteController() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        <Route path={rootPath} element={<Layout />}>
+        <Route path={routes.root} element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path={aboutPath} element={<About />} />
-          <Route path={featuresPath} element={<Features />} />
-          <Route path={publicationsPath} element={<Publications />} />
-          <Route path={calendarPath} element={<Calendar />} />
-          <Route path={healthPath} element={<Health />} />
+          <Route path={routes.about} element={<About />} />
+          <Route path={routes.features} element={<Features />} />
+          <Route path={routes.publications} element={<Publications />} />
+          <Route path={routes.calendar} element={<Calendar />} />
+          <Route path={routes.health} element={<Health />} />
 
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
