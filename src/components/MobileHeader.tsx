@@ -1,47 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import headerLogo from "../assets/header-logo.svg";
+import { headerRoutes } from "../routes/routePaths";
+import { useState } from "react";
 
 export default function MobileHeader() {
   const navigate = useNavigate();
-
-  //one source of truth for the nav items
-  const items: { label: string; to: string }[] = [
-    { label: "About Us", to: "/about" },
-    { label: "Featured", to: "/features" },
-    { label: "Calendar", to: "/calendar" },
-    { label: "Publications", to: "/publications" },
-  ];
+  const [hamburgerMenuOpen, setHamburgerMenuOpen] = useState(false);
 
   return (
-    <header className="z-200 w-full h-max fixed top-0 left-0 flex h-[80px] bg-white border-b border-gray-200 shadow-sm">
+    <header className="z-200 w-full h-[130px] fixed top-0 left-0 flex flex-row items-start justify-between overflow-hidden ">
       {/* logo */}
-      <img
-        src={headerLogo}
-        alt="Thread logo"
-        className="absolute z-20 object-contain"
-        style={{
-          left: "2%",
-          width: "48px",
-          height: "50px",
-          top: "50%",
-          transform: "translateY(-50%)",
-        }}
-      />
-
-      {/* Mobile navigation menu */}
-      <nav className="flex-1 flex items-center justify-end pr-4">
-        <div className="flex gap-4">
-          {items.map((item) => (
-            <button
-              key={item.label}
-              onClick={() => navigate(item.to)}
-              className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors"
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </nav>
+      <img src={headerLogo} alt="Thread logo" className="z-20 w-max h-auto object-contain object-center px-5 py-4.5"/>
+      
+      <div className="w-max h-auto relative">
+        {/* background ribbon svg */}
+        <svg xmlns="http://www.w3.org/2000/svg" width="167" height="119" viewBox="0 0 167 119" fill="none">
+        <path id="header-thread-mobile" d="M31.7656 -8C40.7656 78.5 191.266 83 191.266 83" stroke="#AF1E2D" stroke-width="50"/>
+            <text className="select-none" style={{ fontSize: "14px", fill: "#FFFFFF", fontWeight: 800, dominantBaseline: "middle" }}>
+            <textPath
+                  href="#header-thread-mobile"
+                  onClick={() => setHamburgerMenuOpen(!hamburgerMenuOpen)}
+                  className="cursor-pointer"
+                  startOffset="30%"
+                >
+                {hamburgerMenuOpen ? "Close" : "Menu"}
+                </textPath>
+            </text>
+        </svg>
+      </div>
     </header>
   );
 }

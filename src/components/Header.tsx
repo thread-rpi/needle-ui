@@ -1,24 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import headerLogo from "../assets/header-logo.svg";
-import { routes } from "../routes/routePaths";
-
-const headerRoutes = [
-  { label: "About Us", path: routes.about, offset: "9%" },
-  { label: "Featured", path: routes.features, offset: "32%" },
-  { label: "Calendar", path: routes.calendar, offset: "55%" },
-  { label: "Publications", path: routes.publications, offset: "75%" },
-];
+import { headerRoutes } from "../routes/routePaths";
 
 export default function Header() {
   const navigate = useNavigate();
 
   return (
     <header className="z-200 w-full h-[130px] fixed top-0 left-0 flex flex-row items-start justify-between overflow-hidden ">
-
       {/* logo */}
       <img src={headerLogo} alt="Thread logo" className="z-20 w-max h-auto object-contain object-center px-5 py-4.5"/>
 
-      
       <div className="w-max h-auto relative">
         {/* background ribbon svg */}
         <svg xmlns="http://www.w3.org/2000/svg" width="714" height="142" viewBox="0 0 714 142" fill="none">
