@@ -4,6 +4,8 @@ import Loader from "../components/Loader";
 import { rootPath, aboutPath, featuresPath, publicationsPath, calendarPath, healthPath } from "./routePaths";
 import Layout from "../pages/Layout";
 
+
+
 const Home = lazy(() => import("../pages/Home"));
 const About = lazy(() => import("../pages/About"));
 const Features = lazy(() => import("../pages/Features"));
@@ -11,6 +13,7 @@ const Publications = lazy(() => import("../pages/Publications"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 const Health = lazy(() => import("../pages/Health"));
 const NotFound = lazy(() => import("../pages/NotFound"));
+const AdminHome = lazy(() => import("../pages/admin/AdminHome"));
 
 export default function RouteController() {
   return (
@@ -29,6 +32,9 @@ export default function RouteController() {
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
           </Route>
+
+          <Route path="/admin" element={<AdminHome />} />
+
         </Routes>
       </BrowserRouter>
     </Suspense>
