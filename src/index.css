@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+/* font utility for Gabarito */
+@layer utilities {
+  .font-gabarito {
+    font-family: "Gabarito", sans-serif;
+  }
+}

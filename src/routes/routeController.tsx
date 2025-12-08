@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loader from "../components/Loader";
-import { rootPath, aboutPath, featuresPath, publicationsPath, calendarPath, healthPath } from "./routePaths";
+import { rootPath, aboutPath, featuresPath, publicationsPath, calendarPath, healthPath, loginPath } from "./routePaths";
 import Layout from "../pages/Layout";
 
 const Home = lazy(() => import("../pages/Home"));
@@ -11,12 +11,14 @@ const Publications = lazy(() => import("../pages/Publications"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 const Health = lazy(() => import("../pages/Health"));
 const NotFound = lazy(() => import("../pages/NotFound"));
+const Login = lazy(() => import("../pages/Login"));
 
 export default function RouteController() {
   return (
     <Suspense fallback={<Loader />}>
       <BrowserRouter>
         <Routes>
+          <Route path={loginPath} element={<Login />} />
           <Route path={rootPath} element={<Layout />}>
             <Route index element={<Home />} />
             <Route path={aboutPath} element={<About />} />
