@@ -1,15 +1,18 @@
 import { useState } from "react";
 import RecentEventsPopup from "../components/RecentEventsPopup";
 import LoopTap from "../assets/LoopTap.svg";
+import { useViewport } from "../contexts/ViewportContext";
 
 const Home = () => {
-  const [open, setOpen] = useState(false);
+  const { isMobile } = useViewport();
 
-  const handleClick = () => setOpen(!open);
+  const [recentEventsPopupOpen, setRecentEventsPopupOpen] = useState(false);
+  
+  const handleClick = () => setRecentEventsPopupOpen(!recentEventsPopupOpen);
 
   return (
     <div className="relative w-full h-screen">
-      <button
+     {!isMobile && ( <button
         onClick={handleClick}
         className="absolute cursor-pointer z-10"
         style={{
@@ -21,8 +24,10 @@ const Home = () => {
       >
         <img src={LoopTap} alt="The Loop" className="w-auto h-full" />
       </button>
-
-      <RecentEventsPopup isOpen={open} />
+      )}
+      {!isMobile && ( 
+      <RecentEventsPopup isOpen={recentEventsPopupOpen} />
+      )}
     </div>
   );
 };

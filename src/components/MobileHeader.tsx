@@ -1,32 +1,107 @@
 import { useNavigate } from "react-router-dom";
-import headerLogo from "../assets/header-logo.svg";
-import { headerRoutes } from "../routes/routePaths";
-import { useState } from "react";
+import { headerRoutes, routes } from "../routes/routePaths";
+import { useState, useEffect } from "react";
+import { Icon } from "@iconify/react";
 
 export default function MobileHeader() {
   const navigate = useNavigate();
   const [hamburgerMenuOpen, setHamburgerMenuOpen] = useState(false);
 
+  const handleMenuClick = () => {
+    setHamburgerMenuOpen(!hamburgerMenuOpen);
+  };
+
+  const handleNavClick = (path: string) => {
+    navigate(path);
+    setHamburgerMenuOpen(false);
+  };
+
+  useEffect(() => {
+    console.log('hamburgerMenuOpen: ', hamburgerMenuOpen);
+  }, [hamburgerMenuOpen]);
+
   return (
-    <header className="z-200 w-full h-[130px] fixed top-0 left-0 flex flex-row items-start justify-between overflow-hidden ">
-      {/* logo */}
-      <img src={headerLogo} alt="Thread logo" className="z-20 w-max h-auto object-contain object-center px-5 py-4.5"/>
+    <header 
+      className={`z-200 w-full fixed top-0 left-0 flex items-center justify-between p-7 transition-all duration-300 ease-in-out mix-blend-exclusion
+        
+     `}
+     >
+      {/* menu icon button */}
+      <button
+        onClick={handleMenuClick}
+        className={`relative z-30 flex items-center justify-center transition-all duration-300
+          ${hamburgerMenuOpen ? 'w-9.5 h-9.5' : 'w-8 h-8'} 
+        `}
+        aria-label="Toggle menu"
+      >
       
-      <div className="w-max h-auto relative">
-        {/* background ribbon svg */}
-        <svg xmlns="http://www.w3.org/2000/svg" width="167" height="119" viewBox="0 0 167 119" fill="none">
-        <path id="header-thread-mobile" d="M31.7656 -8C40.7656 78.5 191.266 83 191.266 83" stroke="#AF1E2D" stroke-width="50"/>
-            <text className="select-none" style={{ fontSize: "14px", fill: "#FFFFFF", fontWeight: 800, dominantBaseline: "middle" }}>
-            <textPath
-                  href="#header-thread-mobile"
-                  onClick={() => setHamburgerMenuOpen(!hamburgerMenuOpen)}
-                  className="cursor-pointer"
-                  startOffset="30%"
-                >
-                {hamburgerMenuOpen ? "Close" : "Menu"}
-                </textPath>
-            </text>
-        </svg>
+        <div className='relative w-full h-full'>
+          {/* hamburger menu icon */}
+          <Icon 
+            icon="icon-park-outline:hamburger-button" width="100%" height="100%" color='white'
+            className={`absolute transition-all duration-300 mix-blend-exclusion ${
+              hamburgerMenuOpen 
+                ? 'opacity-0 rotate-90 scale-0' 
+                : 'opacity-100 rotate-0 scale-100'
+            }`}
+          />
+
+          {/* close icon */}
+          <Icon 
+            icon="entypo:cross" width="100%" height="100%" color='black' 
+            className={`absolute transition-all duration-300 object-center ${
+              hamburgerMenuOpen 
+                ? 'opacity-100 rotate-0 scale-100'  
+                : 'opacity-0 -rotate-90 scale-0'
+            }`}
+          />
+        </div>
+      </button>
+
+      {/* THE THREAD text */}
+      <div 
+        className={`z-50 font-bold text-2xl text-white tracking-[1.28px] whitespace-nowrap relative font-futura transition-all duration-300 mix-blend-exclusion`}
+        onClick={() => handleNavClick(routes.root)}
+      >THE THREAD</div>
+
+      {/* dropdown menu */}
+      <div className={`fixed top-0 left-0 pb-20 px-10 w-full h-full bg-white z-25 flex flex-col items-start justify-end transition-all duration-300 ease-in-out mix-blend-normal ${
+        hamburgerMenuOpen 
+          ? 'translate-y-0 opacity-100' 
+          : 'opacity-0 pointer-events-none duration-500 ease-in-out'
+      }`}>
+        <nav className="flex flex-col z-25">
+          <button
+            key='home'
+            onClick={() => handleNavClick(routes.root)}
+            className={`py-7 text-left text-black font-bold text-2xl transition-all duration-600 ease-in-out ${
+              hamburgerMenuOpen 
+                ? 'opacity-100' 
+                : 'opacity-0'
+            }`}
+            style={{
+              transitionDelay: hamburgerMenuOpen ? '250 ms' : '0ms'
+            }}
+          >
+            {'HOME'}
+          </button>
+          {(headerRoutes).map((item, index) => (
+            <button
+              key={item.label}
+              onClick={() => handleNavClick(item.path)}
+              className={`py-7 text-left text-black font-bold text-2xl transition-all duration-600 ease-in-out ${
+                hamburgerMenuOpen 
+                  ? 'opacity-100' 
+                  : 'opacity-0'
+              }`}
+              style={{
+                transitionDelay: hamburgerMenuOpen ? `${((index+1) * 50) + 250}ms` : '0ms'
+              }}
+            >
+              {item.label.toUpperCase()}
+            </button>
+          ))}
+        </nav>
       </div>
     </header>
   );
