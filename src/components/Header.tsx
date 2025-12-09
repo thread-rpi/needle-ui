@@ -1,14 +1,51 @@
-import { Link } from "react-router-dom";
-import { aboutPath, featuresPath, publicationsPath, calendarPath } from "../routes/routePaths";
+import { useNavigate } from "react-router-dom";
+import headerLogo from "../assets/header-logo.svg";
+import { routes, headerRoutes } from "../routes/routePaths";
 
 export default function Header() {
+  const navigate = useNavigate();
+
   return (
-    <nav className="z-200 w-full h-max absolute flex justify-end gap-4 p-4">
-      {/* thread logo w child link to rootPath */}
-      <Link to={aboutPath}>About Us</Link>
-      <Link to={featuresPath}>Features</Link>
-      <Link to={publicationsPath}>Publications</Link>
-      <Link to={calendarPath}>Calendar</Link>
-    </nav>
-  )
+    <header className="z-200 w-full h-[130px] fixed top-0 left-0 flex flex-row items-start justify-between overflow-hidden ">
+      {/* logo */}
+      <img 
+        src={headerLogo} 
+        alt="Thread logo" 
+        className="z-20 w-max h-auto object-contain object-center px-5 py-4.5 cursor-pointer"
+        onClick={() => navigate(routes.root)}
+      />
+
+      {/* navbar */}
+      <div className="w-max h-auto relative">
+        {/* header thread svg */}
+        <svg xmlns="http://www.w3.org/2000/svg" width="714" height="142" viewBox="0 0 714 142" fill="none">
+          <g filter="url(#filter0_d_2551_474)">
+            <path id="header-thread" d="M28.3721 -17.7407C108.872 117.259 461.701 36.9444 571.872 56.7593C682.043 76.5742 687.372 108.259 750.872 108.259" stroke="#AF1E2D" stroke-width="50"/>
+            <text
+              className="select-none"
+              style={{
+                fontSize: "14px",
+                fill: "#FFFFFF",
+                fontWeight: 800,
+                dominantBaseline: "middle",
+              }}
+            >
+              {/* text path for each route */}
+              {headerRoutes.map((item) => (
+                <textPath
+                  key={item.label}
+                  href="#header-thread"
+                  startOffset={item.offset}
+                  onClick={() => navigate(item.path)}
+                  className="cursor-pointer"
+                >
+                  {item.label.toUpperCase()}
+                </textPath>
+              ))}
+            </text>
+          </g>
+        </svg>
+      </div>
+    </header>
+  );
 }
