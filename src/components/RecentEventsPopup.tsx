@@ -1,15 +1,19 @@
-import { useRecentEvents } from "../api/queries";
-
+import RecentEventCard from "./RecentEventCard";
+import { useRecentEvents } from "../api/queries.ts";
 interface RecentEventsPopupProps {
   isOpen: boolean;
 }
 
 export default function RecentEventsPopup({ isOpen }: RecentEventsPopupProps) {
-  const { data: recentEvents, isLoading, isError, error } = useRecentEvents(isOpen);
+
+
+
+   const { data: recentEvents, isLoading, isError, error } = useRecentEvents(isOpen);
+  if (!isOpen) return null;
+    if (isLoading) return <div>Loading...</div>;
+   if (isError) return <div>Error: {error.message}</div>;
 
   if (!isOpen) return null;
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
 
   // Fixed pixel dimensions from Figma
   const totalStackWidth = 275;
@@ -37,28 +41,24 @@ export default function RecentEventsPopup({ isOpen }: RecentEventsPopupProps) {
         }
 
         let scale = 1.2;
-        
-        // original CSS styling for the first three buttons
+
         let bgColor = "bg-black";
         let textColor = "text-white";
         let shadowClass = "";
 
-        // CSS styling for last three buttons
         if (index > 3) {
           bgColor = "bg-white";
           textColor = "text-black";
         }
-        // CSS styling for middle button
 
         if (isMiddle) {
           bgColor = "bg-[#FF0000]";
           textColor = "text-white";
           shadowClass = "shadow-[0px_-1px_6px_1px_rgba(255,0,0,0.91)]";
-          scale = 1.3
+          scale = 1.3;
         }
 
-        // Control space under each button until the last
-        let marginBottom = '0';
+        let marginBottom = "0";
         if (index < 6) {
           marginBottom = `${buttonGap}px`;
         }
@@ -74,6 +74,12 @@ export default function RecentEventsPopup({ isOpen }: RecentEventsPopupProps) {
             }}
             className={`flex items-center justify-center rounded-[30.5948px] ${bgColor} ${textColor} ${shadowClass}`}
           >
+            {/* OPTIONAL: You can render event.title or RecentEventCard here */}
+            <RecentEventCard 
+            title={event.title}
+            date={event.date}
+            type={event.type}
+          />
           </button>
         );
       })}
