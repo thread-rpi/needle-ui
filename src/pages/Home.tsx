@@ -1,7 +1,7 @@
 import { useState } from "react";
 import RecentEventsPopup from "../components/RecentEventsPopup";
 import LoopTap from "../assets/LoopTap.svg";
-import { useViewport } from "../contexts/ViewportContext";
+import { useViewport } from "../contexts/useViewport";
 
 const Home = () => {
   const { isMobile } = useViewport();

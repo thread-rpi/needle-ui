@@ -1,13 +1,7 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-
-interface ViewportContextType {
-  width: number;
-  isMobile: boolean;
-}
-
-const ViewportContext = createContext<ViewportContextType | undefined>(undefined);
-
-const MOBILE_BREAKPOINT = 768;
+import React, { useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { ViewportContext, type ViewportContextType } from "./useViewport";
+import { MOBILE_BREAKPOINT } from "./useViewport";
 
 interface ViewportProviderProps {
   children: ReactNode;
@@ -49,12 +43,3 @@ export function ViewportProvider({ children }: ViewportProviderProps) {
     </ViewportContext.Provider>
   );
 }
-
-export function useViewport() {
-  const context = useContext(ViewportContext);
-  if (context === undefined) {
-    throw new Error("useViewport must be used within a ViewportProvider");
-  }
-  return context;
-}
-
