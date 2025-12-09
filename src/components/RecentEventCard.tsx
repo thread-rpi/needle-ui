@@ -19,7 +19,7 @@ function isOlder(date: string) {
   return date.toLowerCase().includes("days ago");
 }
 
-const RecentEventCard = ({ title, date, type }: RecentEventCardProps) => {
+const RecentEventCard = ({ title, date }: RecentEventCardProps) => {
   const older = isOlder(date);
 
   return (
