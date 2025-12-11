@@ -6,4 +6,9 @@ interface ImportMetaEnv {
   interface ImportMeta {
     readonly env: ImportMetaEnv;
   }
-  
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    textPath: any;
+  }
+}
