@@ -1,6 +1,6 @@
-import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import { apiGet } from "./api";
-import type { HealthError, HealthResponse } from "../types/queryTypes";
+import { useMutation, useQuery, type UseMutationResult, type UseQueryResult } from "@tanstack/react-query";
+import { apiGet, apiPost } from "./api";
+import type { HealthError, HealthResponse, LoginResponse, LoginError, LoginRequest } from "../types/queryTypes";
 
 
 export interface RecentEvent { // types for each recent event object returned from api
@@ -41,5 +41,20 @@ export const useRecentEvents = (isOpen: boolean) => { // query only if RecentEve
     queryKey: ['getRecentEvents'],
     queryFn: getRecentEvents,
     enabled: isOpen,
+  });
+};
+
+// login endpoint request
+async function loginRequest({ email, password }: LoginRequest): Promise<LoginResponse> {
+  return apiPost<LoginResponse, LoginError>({
+    endpoint: "auth/login",
+    body: { email, password },
+  });
+}
+
+// login endpoint hook - mutation only executes when mutate() is called with valid credentials
+export const useLogin = (): UseMutationResult<LoginResponse, LoginError, LoginRequest> => {
+  return useMutation<LoginResponse, LoginError, LoginRequest>({
+    mutationFn: loginRequest
   });
 };

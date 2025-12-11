@@ -1,17 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useLogin } from "../../api/queries";
+import { routes } from "../../routes/routePaths";
 
-const Login = () => {
+const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const { 
+    isSuccess: isLoginSuccess,
+    data: loginData, 
+    isError: isLoginError,
+    error: loginError, 
+    isPending: isLoginPending,
+    mutate: loginMutate,
+  } = useLogin();
+
+  // Validate email format
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleLogin = () => {
+    // Clear previous errors
+    setError("");
+
+    // Validate inputs
     if (!email.trim() || !password.trim()) {
       setError("please fill in both fields!");
       return;
     }
-    setError("");
+
+    if (!isValidEmail(email.trim())) {
+      setError("please enter a valid email address!");
+      return;
+    }
+
+    // Only trigger mutation if validation passes
+    loginMutate({ email: email.trim(), password });
   };
+
+  // Handle successful login
+  useEffect(() => {
+    if (isLoginSuccess && loginData) {
+      // Store tokens
+      localStorage.setItem("token", loginData.accessToken);
+      if (loginData.refreshToken) {
+        localStorage.setItem("refreshToken", loginData.refreshToken);
+      }
+      // Redirect to admin page after successful login
+      navigate(routes.admin, { replace: true });
+    }
+  }, [isLoginSuccess, loginData, navigate]);
+
+  // Handle login errors
+  useEffect(() => {
+    if (isLoginError && loginError) {
+      setError(loginError.error || "An error occurred. Please try again.");
+    }
+  }, [isLoginError, loginError]);
 
   return (
     <div className="min-h-screen w-full bg-thread-off-white flex items-center justify-center">
@@ -60,13 +109,16 @@ const Login = () => {
         {/* enter button */}
         <button
           onClick={handleLogin}
-          className="mt-2 flex w-auto h-auto items-center justify-center py-3 px-8 bg-thread-red rounded-full hover:bg-black transition-colors duration-300"
+          disabled={isLoginPending}
+          className="mt-2 flex w-auto h-auto items-center justify-center py-3 px-8 bg-thread-red rounded-full hover:bg-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <div className="font-bold text-white text-lg">enter</div>
+          <div className="font-bold text-white text-lg">
+            {isLoginPending ? "logging in..." : "enter"}
+          </div>
         </button>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;

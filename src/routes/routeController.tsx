@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 import Loader from "../components/Loader";
 import { routes } from "./routePaths";
 import Layout from "../pages/Layout";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const Home = lazy(() => import("../pages/Home"));
 const About = lazy(() => import("../pages/About"));
@@ -12,13 +13,27 @@ const Publications = lazy(() => import("../pages/Publications"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 const Health = lazy(() => import("../pages/Health"));
 const NotFound = lazy(() => import("../pages/NotFound"));
-const Login = lazy(() => import("../pages/admin/Login"));
+const Login = lazy(() => import("../pages/admin/AdminLogin"));
+const AdminHome = lazy(() => import("../pages/admin/AdminHome"));
 
 export default function RouteController() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-          <Route path={routes.login} element={<Login />} />
+        {/* Public login route - outside Layout */}
+        <Route path={routes.login} element={<Login />} />
+        
+        {/* Protected admin route - outside Layout */}
+        <Route
+          path={routes.admin}
+          element={
+            <ProtectedRoute>
+              <AdminHome />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Public routes with Layout */}
         <Route path={routes.root} element={<Layout />}>
           <Route index element={<Home />} />
           <Route path={routes.about} element={<About />} />
