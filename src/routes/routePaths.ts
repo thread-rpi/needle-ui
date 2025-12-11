@@ -5,6 +5,7 @@ export const routes = {
   publications: '/publications',
   calendar: '/calendar',
   health: '/health',
+  login: '/login',
 };
 
 export const headerRoutes = [

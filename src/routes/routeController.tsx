@@ -2,9 +2,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loader from "../components/Loader";
-import {
-  routes,
-} from "./routePaths";
+import { routes } from "./routePaths";
 import Layout from "../pages/Layout";
 
 const Home = lazy(() => import("../pages/Home"));
@@ -14,11 +12,13 @@ const Publications = lazy(() => import("../pages/Publications"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 const Health = lazy(() => import("../pages/Health"));
 const NotFound = lazy(() => import("../pages/NotFound"));
+const Login = lazy(() => import("../pages/admin/Login"));
 
 export default function RouteController() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
+          <Route path={routes.login} element={<Login />} />
         <Route path={routes.root} element={<Layout />}>
           <Route index element={<Home />} />
           <Route path={routes.about} element={<About />} />
