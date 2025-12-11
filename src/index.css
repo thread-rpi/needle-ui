@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  /* Color variables from Figma */
+  /* Primary brand colors */
+  --color-thread-red: #AF1E2D;
+}
+
 /* font utility for Gabarito */
 @layer utilities {
   .font-gabarito {

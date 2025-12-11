@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+// src/routes/routeController.tsx
+import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loader from "../components/Loader";
-import { rootPath, aboutPath, featuresPath, publicationsPath, calendarPath, healthPath, loginPath } from "./routePaths";
+import { routes } from "./routePaths";
 import Layout from "../pages/Layout";
 
 const Home = lazy(() => import("../pages/Home"));
@@ -16,23 +17,20 @@ const Login = lazy(() => import("../pages/admin/Login"));
 export default function RouteController() {
   return (
     <Suspense fallback={<Loader />}>
-      <BrowserRouter>
-        <Routes>
-          <Route path={loginPath} element={<Login />} />
-          <Route path={rootPath} element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path={aboutPath} element={<About />} />
-            <Route path={featuresPath} element={<Features />} />
-            <Route path={publicationsPath} element={<Publications />} />
-            <Route path={calendarPath} element={<Calendar />} />
-            
-            <Route path={healthPath} element={<Health />} />
+      <Routes>
+          <Route path={routes.login} element={<Login />} />
+        <Route path={routes.root} element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path={routes.about} element={<About />} />
+          <Route path={routes.features} element={<Features />} />
+          <Route path={routes.publications} element={<Publications />} />
+          <Route path={routes.calendar} element={<Calendar />} />
+          <Route path={routes.health} element={<Health />} />
 
-            {/* Catch-all */}
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          {/* Catch-all */}
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </Suspense>
   );
 }
