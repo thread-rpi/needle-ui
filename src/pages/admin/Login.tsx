@@ -7,30 +7,25 @@ const Login = () => {
 
   const handleLogin = () => {
     if (!email.trim() || !password.trim()) {
-      setError("[please fill in both fields]");
+      setError("please fill in both fields!");
       return;
     }
     setError("");
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#f2f2f2] flex items-center justify-center">
-      <div className="flex flex-col w-[390px] items-center gap-[20px]">
+    <div className="min-h-screen w-full bg-thread-off-white flex items-center justify-center">
+      <div className="flex flex-col w-1/2 min-w-max max-w-[400px] items-center gap-5">
         {/* NEEDLE */}
         <div
-          className="relative flex items-center justify-center self-stretch
-                     font-gabarito font-black
-                     text-[#af1e2d] text-[64px] text-center leading-[normal]"
+          className="relative flex items-center justify-center self-stretch font-black text-6xl text-thread-red text-[64px] text-center"
         >
           NEEDLE
         </div>
 
         {/* error message */}
         {error && (
-          <p
-            className="text-[12px] text-[#af1e2d] text-center -mt-2 mb-2
-                       font-gabarito font-bold"
-          >
+          <p className="text-md text-thread-red text-center -mt-2 mb-2 font-semibold">
             {error}
           </p>
         )}
@@ -43,10 +38,7 @@ const Login = () => {
             <input
               type="email"
               placeholder="email"
-              className="relative z-10 w-full h-[44px] bg-transparent
-                         font-gabarito font-bold
-                         text-[#af1e2d] placeholder:text-[#af1e2d]
-                         text-[16px] outline-none"
+              className="relative z-10 w-full h-[44px] bg-transparent font-bold text-lg text-thread-red placeholder:text-thread-red focus:placeholder-transparent outline-none"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -58,10 +50,7 @@ const Login = () => {
             <input
               type="password"
               placeholder="password"
-              className="relative z-10 w-full h-[44px] bg-transparent
-                         font-gabarito font-bold
-                         text-[#af1e2d] placeholder:text-[#af1e2d]
-                         text-[16px] outline-none"
+              className="relative z-10 w-full h-[44px] bg-transparent font-bold text-lg text-thread-red placeholder:text-thread-red focus:placeholder-transparent outline-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -71,15 +60,9 @@ const Login = () => {
         {/* enter button */}
         <button
           onClick={handleLogin}
-          className="mt-2 flex w-52 h-12 items-center justify-center px-[17px]
-                     bg-[#af1e2d] rounded-[20px]"
+          className="mt-2 flex w-auto h-auto items-center justify-center py-3 px-8 bg-thread-red rounded-full hover:bg-black transition-colors duration-300"
         >
-          <span
-            className="font-gabarito font-bold
-                       text-white text-[16px] leading-[normal]"
-          >
-            enter
-          </span>
+          <div className="font-bold text-white text-lg">enter</div>
         </button>
       </div>
     </div>

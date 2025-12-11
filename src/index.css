@@ -4,9 +4,17 @@
   /* Color variables from Figma */
   /* Primary brand colors */
   --color-thread-red: #AF1E2D;
+  --color-thread-off-white:#f2f2f2;
 }
 
-/* font utility for Gabarito */
+/* gabarito as base font globally */
+@layer base {
+  body {
+    font-family: "Gabarito", sans-serif;
+  }
+}
+
+/* font utility for gabarito */
 @layer utilities {
   .font-gabarito {
     font-family: "Gabarito", sans-serif;
