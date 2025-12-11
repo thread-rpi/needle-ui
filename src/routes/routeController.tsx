@@ -11,7 +11,7 @@ const Publications = lazy(() => import("../pages/Publications"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 const Health = lazy(() => import("../pages/Health"));
 const NotFound = lazy(() => import("../pages/NotFound"));
-const Login = lazy(() => import("../pages/Login"));
+const Login = lazy(() => import("../pages/admin/Login"));
 
 export default function RouteController() {
   return (
