@@ -1,25 +1,13 @@
 export default function AdminHeader() {
+  
   return (
-    <div className="w-full flex justify-center mt-4">
-      <div className="w-[95%] bg-white rounded-[20px] shadow-lg px-6 py-3 flex items-center justify-between">
-
-        <span className="font-gabarito font-extrabold text-[28px] leading-[34px] text-[#AF1E2D] uppercase">
-          NEEDLE
-        </span>
-
-        <div className="flex flex-row items-center gap-[5px] w-[197px] h-[34px]">
-
-        <span className="font-extrabold text-[26px] leading-[20px]">
-            [role]
-        </span>
-
-        <span className="font-extrabold text-[26px] leading-[20px] text-[#AF1E2D]">
-            [F_NAME]
-        </span>
-
+    <div className="w-full fixed top-5.5 left-0 z-200 flex justify-center">
+      <div className="w-[93%] h-14 bg-white rounded-2xl shadow-lg px-6 py-3 flex items-center justify-between">
+        <div className="font-extrabold text-2xl text-thread-red uppercase">NEEDLE</div>
+        <div className="flex flex-row items-end gap-1.5 w-auto">
+          <div className="font-bold text-lg align-text-bottom"> executive director </div>
+          <div className="font-extrabold text-2xl text-thread-red"> Pierce </div>
         </div>
-
-
       </div>
     </div>
   );
