@@ -58,4 +58,22 @@ export async function apiGet<T, K>({endpoint, params}: apiGetParams): Promise<T>
   }
 }
 
+interface apiPostParams {
+  endpoint: string
+  params?: URLSearchParams | Record<string, string>
+  body?: unknown
+}
+
+export async function apiPost<T, K>({endpoint, params, body}: apiPostParams): Promise<T> {
+  try {
+    return await api.post(endpoint, {json: body, searchParams: params}).json<T>();
+  } catch (e) {
+    if (e instanceof HTTPError) {
+      const errorBody = await e.response.json().catch(() => ({}));
+      throw { status: e.response.status, ...errorBody } as K;
+    }
+    throw e;
+  }
+}
+
 
