@@ -1,3 +1,58 @@
+import React from "react";
+
+/** Allowed event types (drives icon/styling). */
+export type RecentEventType = "photo" | "question" | "party" | "meeting";
+
+/** Visual tone variants (matches Figma: black cards, white cards, red highlight). */
+export type RecentEventTone = "dark" | "light" | "highlight";
+
+/** Size variants (Figma uses 50px rows and one 80px row). */
+export type RecentEventSize = "sm" | "lg";
+
+export interface RecentEventCardProps {
+  /** Primary label shown on the card. */
+  title: string;
+  /** Secondary label, e.g. "17 Days Ago", "TODAY", "In 2 Days". */
+  date: string;
+  /** Event type (used for icon + semantics). */
+  type: RecentEventType;
+
+  /** Optional visual variants. */
+  tone?: RecentEventTone;
+  size?: RecentEventSize;
+
+  /** Interaction. If set, renders a button. */
+  onClick?: () => void;
+  disabled?: boolean;
+
+  /** Styling escape hatch. */
+  className?: string;
+
+  /** Override icon. */
+  icon?: React.ReactNode;
+}
+
+function cx(...parts: Array<string | undefined | null | false>) {
+  return parts.filter(Boolean).join(" ");
+}
+
+function DefaultIcon({ type, tone }: { type: RecentEventType; tone: RecentEventTone }) {
+  const glyph = type === "photo" ? "📷" : type === "meeting" ? "🗓️" : type === "question" ? "❓" : "🎉";
+  return (
+    <span
+      aria-hidden
+      className={cx(
+        "grid h-[35px] w-[35px] place-items-center rounded-[10px]",
+        tone === "light" ? "bg-black text-white" : "bg-white text-black"
+      )}
+    >
+      {glyph}
+    </span>
+  );
+}
+
+
+
 // src/components/RecentEventCard.tsx
 
 export type RecentEventType = "photo" | "question" | "party" | "meeting";
@@ -136,7 +191,7 @@ export default function RecentEventCard({
   return <div className={base}>{content}</div>;
 }
 
-// Determine if this event is older → use lighter font
+// Determine if this event is older → use lighter  font
 function isOlder(date: string) {
   return date.toLowerCase().includes("days ago");
 }
