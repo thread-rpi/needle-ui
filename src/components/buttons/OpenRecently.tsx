@@ -5,8 +5,8 @@ export default function OpenRecentlyButton() {
     <div
       className="fixed"
       style={{
-        top: "min(21.2vh, 190px)",
-        right: "0vw",
+        top: "240px",      // fixed distance from top
+        right: "50px",     // fixed distance from right
       }}
     >
       <img
@@ -14,7 +14,8 @@ export default function OpenRecentlyButton() {
         alt="Recently"
         className="h-auto object-contain"
         style={{
-          width: "19vw", 
+          width: "300px",          // fixed width
+          transform: "scale(1.40)", // increased scale 
         }}
       />
     </div>
