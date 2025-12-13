@@ -1,86 +1,63 @@
-import RecentEventCard from "./RecentEventCard";
-import { useRecentEvents } from "../api/queries.ts";
-interface RecentEventsPopupProps {
+import { useEffect } from "react";
+import RecentEventCard, { RecentEventType } from "./RecentEventCard";
+
+export interface RecentEventsPopupProps {
   isOpen: boolean;
+  onClose?: () => void;
 }
 
-export default function RecentEventsPopup({ isOpen }: RecentEventsPopupProps) {
+/** Mock data until backend connected */
+const MOCK = [
+  { id: "1", title: "Mono Businesswear", date: "17 Days Ago", type: "photo" as RecentEventType },
+  { id: "2", title: "Fit Wars", date: "8 Days Ago", type: "question" as RecentEventType },
+  { id: "3", title: "Ebony Ball", date: "1 Day Ago", type: "party" as RecentEventType },
+  { id: "4", title: "Free @ Union", date: "TODAY", type: "photo" as RecentEventType },
+  { id: "5", title: "General Body", date: "In 2 Days", type: "meeting" as RecentEventType },
+  { id: "6", title: "Student Council @ JEC", date: "In 11 Days", type: "meeting" as RecentEventType },
+  { id: "7", title: "Rep Ya Flag", date: "23 Days Ago", type: "question" as RecentEventType },
+];
 
+export default function RecentEventsPopup({ isOpen, onClose }: RecentEventsPopupProps) {
+  // Close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
 
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose?.();
+    };
 
-   const { data: recentEvents, isLoading, isError, error } = useRecentEvents(isOpen);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
-    if (isLoading) return <div>Loading...</div>;
-   if (isError) return <div>Error: {error.message}</div>;
-
-  if (!isOpen) return null;
-
-  // Fixed pixel dimensions from Figma
-  const totalStackWidth = 275;
-  const middleButtonHeight = 80;
-  const otherButtonHeight = 50;
-
-  const buttonGap = 26;
 
   return (
     <div
-      className="fixed z-50"
-      style={{
-        top: "290px",
-        right: "80px",
-        width: `${totalStackWidth}px`,
-      }}
+      className="fixed z-50 flex flex-col items-end gap-[20px]"
+      style={{ top: "289px", right: "62px" }}
+      role="dialog"
+      aria-label="Recent events"
     >
-      {recentEvents?.slice(0, 7).map((event, index) => {
-        let isMiddle = false;
-        let height = otherButtonHeight;
-
-        if (index === 3) {
-          isMiddle = true;
-          height = middleButtonHeight;
-        }
-
-        let scale = 1.2;
-
-        let bgColor = "bg-black";
-        let textColor = "text-white";
-        let shadowClass = "";
-
-        if (index > 3) {
-          bgColor = "bg-white";
-          textColor = "text-black";
-        }
-
-        if (isMiddle) {
-          bgColor = "bg-[#FF0000]";
-          textColor = "text-white";
-          shadowClass = "shadow-[0px_-1px_6px_1px_rgba(255,0,0,0.91)]";
-          scale = 1.3;
-        }
-
-        let marginBottom = "0";
-        if (index < 6) {
-          marginBottom = `${buttonGap}px`;
-        }
+      {MOCK.map((event, index) => {
+        const tone = index === 3 ? "highlight" : index > 3 ? "light" : "dark";
+        const size = index === 3 ? "lg" : "sm";
 
         return (
-          <button
-            key={event.id}
-            style={{
-              width: `${totalStackWidth}px`,
-              height: `${height}px`,
-              transform: `scale(${scale})`,
-              marginBottom: marginBottom,
-            }}
-            className={`flex items-center justify-center rounded-[30.5948px] ${bgColor} ${textColor} ${shadowClass}`}
-          >
-            {/* OPTIONAL: You can render event.title or RecentEventCard here */}
-            <RecentEventCard 
-            title={event.title}
-            date={event.date}
-            type={event.type}
-          />
-          </button>
+          <div key={event.id} className={index === 3 ? "" : "mr-[24px]"}>
+            <RecentEventCard
+              title={event.title}
+              date={event.date}
+              type={event.type}
+              tone={tone}
+              size={size}
+              onClick={() => {
+                // Later: navigate to event page
+                // For now: just close if provided
+                onClose?.();
+              }}
+            />
+          </div>
         );
       })}
     </div>
