@@ -1,7 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loader from "../components/Loader";
-import { rootPath, aboutPath, featuresPath, publicationsPath, calendarPath, healthPath } from "./routePaths";
+import {
+  rootPath,
+  aboutPath,
+  featuresPath,
+  publicationsPath,
+  calendarPath,
+  healthPath,
+  recentPath,
+} from "./routePaths";
 import Layout from "../pages/Layout";
 
 const Home = lazy(() => import("../pages/Home"));
@@ -10,6 +18,7 @@ const Features = lazy(() => import("../pages/Features"));
 const Publications = lazy(() => import("../pages/Publications"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 const Health = lazy(() => import("../pages/Health"));
+const Recent = lazy(() => import("../pages/Recent"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
 export default function RouteController() {
@@ -23,8 +32,10 @@ export default function RouteController() {
             <Route path={featuresPath} element={<Features />} />
             <Route path={publicationsPath} element={<Publications />} />
             <Route path={calendarPath} element={<Calendar />} />
-            
             <Route path={healthPath} element={<Health />} />
+
+            {/* Demo route for the recent events UI */}
+            <Route path={recentPath} element={<Recent />} />
 
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
