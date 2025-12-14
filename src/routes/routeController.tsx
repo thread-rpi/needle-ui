@@ -15,25 +15,30 @@ const Health = lazy(() => import("../pages/Health"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const AdminLogin = lazy(() => import("../pages/admin/AdminLogin"));
 const AdminHome = lazy(() => import("../pages/admin/AdminHome"));
+const AdminLayout = lazy(() => import("../pages/admin/AdminLayout"));
+const AdminMembers = lazy(() => import("../pages/admin/AdminMembers"));
 
 export default function RouteController() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        {/* admin routes */}
+        {/* admin login route */}
         <Route path={routes.login} element={<AdminLogin />} />
         
-        {/* Protected admin route - outside Layout */}
+        {/* protected admin routes */}
         <Route
-          path={routes.admin}
+          path={routes.adminRoot}
           element={
             <ProtectedRoute>
-              <AdminHome />
+              <AdminLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<AdminHome />} />
+          <Route path={routes.adminMembers} element={<AdminMembers />} />
+        </Route>
 
-        {/* Public routes with Layout */}
+        {/* visitor routes */}
         <Route path={routes.root} element={<Layout />}>
           <Route index element={<Home />} />
           <Route path={routes.about} element={<About />} />
@@ -42,7 +47,7 @@ export default function RouteController() {
           <Route path={routes.calendar} element={<Calendar />} />
           <Route path={routes.health} element={<Health />} />
 
-          {/* Catch-all */}
+          {/* catch-all 404 route */}
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
