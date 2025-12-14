@@ -6,6 +6,8 @@ export const routes = {
   calendar: '/calendar',
   health: '/health',
   login: '/login',
+  adminRoot: '/admin',
+  adminMembers: '/admin/members',
 };
 
 export const headerRoutes = [
