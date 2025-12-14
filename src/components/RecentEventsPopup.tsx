@@ -1,5 +1,5 @@
 import RecentEventCard from './RecentEventCard'
-import { useRecentEvents } from "../api/queries";
+import { useEventOverview } from "../api/queries";
 
 
 // props for recentEventsPopup component
@@ -9,29 +9,29 @@ interface RecentEventsPopupProps {
 
 // recentEventsPopup component
 const RecentEventsPopup = ({ isOpen }: RecentEventsPopupProps) => {
-   const { data: recentEvents, isLoading, isError, error } = useRecentEvents(isOpen);
+   const { data: eventOverview, isLoading, isError, error } = useEventOverview(isOpen);
 
   if (!isOpen) {
     return null; 
   }
 
   if(isLoading){
-    return <div>Loading recent events...</div>
+    return <div>Loading event overview...</div>
   }
   
   if(isError){
-    return <div>Error: {error.message}</div>;
+    return <div>Error: {error.error}</div>;
   }
 
   return (
-    // render a RecentEventCard component for each recentEvent object retrieved
+    // render a RecentEventCard component for each event object retrieved
     <div className="recent-events">
-      {recentEvents?.map((recentEvent) => (
+      {eventOverview?.map((event) => (
         <RecentEventCard
-         key={recentEvent.id} 
-         title = {recentEvent.title}
-         date = {recentEvent.date}
-         type = {recentEvent.type} />
+         key={event.id} 
+         title = {event.title}
+         date = {event.date}
+         type = {event.type} />
       ))}
     </div>
   );

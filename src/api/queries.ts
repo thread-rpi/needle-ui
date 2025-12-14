@@ -11,26 +11,16 @@ import type {
   RefreshTokenError,
   AdminUserResponse,
   AdminUserError,
+  EventOverviewResponse,
+  EventOverviewError,
 } from "../types/queryTypes";
-
-
-export interface RecentEvent { // types for each recent event object returned from api
-  id: string
-  title: string
-  date: string
-  type: string
-}
 
 // health endpoint request
 async function getHealth(): Promise<HealthResponse> {
-  try {
-    return apiGet<HealthResponse, HealthError>({endpoint: 'health'});
-  } catch (err) {
-    throw err as HealthError;
-  }
+  return apiGet<HealthResponse, HealthError>({endpoint: 'health'});
 }
 
-// Health endpoint hook 
+// health endpoint hook 
 export const useGetHealth = (): UseQueryResult<HealthResponse, HealthError> => {
   return useQuery<HealthResponse, HealthError>({
     queryKey: ["health"],
@@ -38,20 +28,17 @@ export const useGetHealth = (): UseQueryResult<HealthResponse, HealthError> => {
   });
 }
 
-// query getRecentEvents api
-// doesn't actually query a valid api yet since the getRecentEvents endpoint hasn't been created yet
-async function getRecentEvents(): Promise<RecentEvent[]> {
-  return apiGet<RecentEvent[], { message: string }>({
-    endpoint: "api/getRecentEvents", 
-  });
+// event overview endpoint request
+async function getEventOverview(): Promise<EventOverviewResponse> {
+  return apiGet<EventOverviewResponse, EventOverviewError>({endpoint: "events/overview"});
 };
 
-// getRecentEvents endpoint hook
-export const useRecentEvents = (isOpen: boolean) => { // query only if RecentEventsPopup is open/active
-  return useQuery<RecentEvent[], Error>({
-    queryKey: ['getRecentEvents'],
-    queryFn: getRecentEvents,
-    enabled: isOpen,
+// event overview endpoint hook - only fetches if enabled (component is open/active)
+export const useEventOverview = (enabled: boolean = true): UseQueryResult<EventOverviewResponse, EventOverviewError> => {
+  return useQuery<EventOverviewResponse, EventOverviewError>({
+    queryKey: ['eventOverview'],
+    queryFn: getEventOverview,
+    enabled: enabled,
   });
 };
 
@@ -92,12 +79,9 @@ async function getCurrentAdminUser(): Promise<AdminUserResponse> {
 
 // current user endpoint hook - only fetches if token exists
 export const useCurrentAdminUser = (enabled: boolean = true): UseQueryResult<AdminUserResponse, AdminUserError> => {
-  // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  
   return useQuery<AdminUserResponse, AdminUserError>({
     queryKey: ["currentAdminUser"],
     queryFn: getCurrentAdminUser,
-    enabled: enabled, // Only fetch if enabled and token exists
-    retry: 1,
+    enabled: enabled
   });
 };

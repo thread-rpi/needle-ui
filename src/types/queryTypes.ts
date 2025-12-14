@@ -1,4 +1,5 @@
 import type { AdminUser } from "./adminTypes";
+import type { OverviewEvent } from "./homeTypes";
 
 // Health endpoint successful response
 export type HealthResponse = {
@@ -51,6 +52,15 @@ export type AdminUserResponse = AdminUser;
 
 // Admin user endpoint error response
 export type AdminUserError = {
+    status: number;
+    error: string;
+};
+
+// Event overview endpoint successful response
+export type EventOverviewResponse = OverviewEvent[];
+
+// Event overview endpoint error response
+export type EventOverviewError = {
     status: number;
     error: string;
 };
