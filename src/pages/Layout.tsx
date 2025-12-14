@@ -10,7 +10,7 @@ export default function Layout() {
   const { isMobile } = useViewport();
 
   return (
-    <div className='flex min-h-lvh bg-white'>
+    <div className='w-full min-h-dvh flex bg-white'>
         {isMobile ? <MobileHeader /> : <Header />}
         <main className='flex-1'>
           <Suspense fallback={<Loader />}>
