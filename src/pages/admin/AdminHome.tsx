@@ -1,5 +1,3 @@
-import { useAuth } from "../../contexts/useAuth";
-import AdminHeader from "../../components/admin/AdminHeader";
 import dropdown from "../../assets/dropdown.svg"
 
 const AdminHome = () => {
