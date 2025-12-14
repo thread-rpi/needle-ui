@@ -1,5 +1,6 @@
 import { useMutation, useQuery, type UseMutationResult, type UseQueryResult } from "@tanstack/react-query";
 import { apiGet, apiPost } from "./api";
+import { API_ROUTES } from "./apiRoutes";
 import type { 
   HealthError, 
   HealthResponse, 
@@ -15,9 +16,10 @@ import type {
   EventOverviewError,
 } from "../types/queryTypes";
 
+
 // health endpoint request
 async function getHealth(): Promise<HealthResponse> {
-  return apiGet<HealthResponse, HealthError>({endpoint: 'health'});
+  return apiGet<HealthResponse, HealthError>({endpoint: API_ROUTES.health});
 }
 
 // health endpoint hook 
@@ -30,7 +32,7 @@ export const useGetHealth = (): UseQueryResult<HealthResponse, HealthError> => {
 
 // event overview endpoint request
 async function getEventOverview(): Promise<EventOverviewResponse> {
-  return apiGet<EventOverviewResponse, EventOverviewError>({endpoint: "events/overview"});
+  return apiGet<EventOverviewResponse, EventOverviewError>({endpoint: API_ROUTES.eventOverview});
 };
 
 // event overview endpoint hook - only fetches if enabled (component is open/active)
@@ -45,7 +47,7 @@ export const useEventOverview = (enabled: boolean = true): UseQueryResult<EventO
 // login endpoint request
 async function loginRequest({ email, password }: LoginRequest): Promise<LoginResponse> {
   return apiPost<LoginResponse, LoginError>({
-    endpoint: "auth/login",
+    endpoint: API_ROUTES.login,
     body: { email, password },
   });
 }
@@ -60,7 +62,7 @@ export const useLogin = (): UseMutationResult<LoginResponse, LoginError, LoginRe
 // refresh token endpoint request
 async function refreshTokenRequest({ refresh_token }: RefreshTokenRequest): Promise<RefreshTokenResponse> {
   return apiPost<RefreshTokenResponse, RefreshTokenError>({
-    endpoint: "auth/refresh",
+    endpoint: API_ROUTES.refreshToken,
     body: { refresh_token },
   });
 }
@@ -74,7 +76,7 @@ export const useRefreshToken = (): UseMutationResult<RefreshTokenResponse, Refre
 
 // current user endpoint request
 async function getCurrentAdminUser(): Promise<AdminUserResponse> {
-  return apiGet<AdminUserResponse, AdminUserError>({ endpoint: "auth/me" });
+  return apiGet<AdminUserResponse, AdminUserError>({ endpoint: API_ROUTES.adminUser });
 }
 
 // current user endpoint hook - only fetches if token exists
