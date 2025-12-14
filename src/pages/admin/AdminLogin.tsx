@@ -72,7 +72,7 @@ const AdminLogin = () => {
     if (userData) {
       setUser(userData);
       // Redirect to admin page after user data is loaded
-      navigate(routes.admin, { replace: true });
+      navigate(routes.adminRoot, { replace: true });
     }
   }, [userData, setUser, navigate]);
 
