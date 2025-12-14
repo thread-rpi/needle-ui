@@ -1,0 +1,1 @@
+import{j as s,r as e,O as a,L as r}from"./index-D7KfuJcQ.js";function n(){return s.jsx("div",{className:"min-h-screen w-full bg-thread-off-white",children:s.jsx(e.Suspense,{fallback:s.jsx(r,{}),children:s.jsx(a,{})})})}export{n as default};

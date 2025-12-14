@@ -1,4 +1,6 @@
-// Health endpoint healthy response
+import type { AdminUser } from "./adminTypes";
+
+// Health endpoint successful response
 export type HealthResponse = {
     data: 'healthy';
 };
@@ -9,17 +11,46 @@ export type HealthError = {
     error: string;
 };
 
+// Login endpoint request body
 export type LoginRequest = {
     email: string;
     password: string;
 };
 
+// Login endpoint successful response
 export type LoginResponse = {
-    accessToken: string;
-    refreshToken: string;
+    access_token: string;
+    refresh_token: string;
 };
 
+// Login endpoint error response
 export type LoginError = {
+    status: number;
+    error: string;
+};
+
+// Refresh token endpoint request body
+export type RefreshTokenRequest = {
+    refresh_token: string;
+};
+
+// Refresh token endpoint successful response
+export type RefreshTokenResponse = {
+    access_token: string;
+    refresh_token?: string;
+};
+
+// Refresh token endpoint error response
+export type RefreshTokenError = {
+    status: number;
+    error: string;
+};
+
+// Admin user endpoint successful response
+export type AdminUserResponse = AdminUser;
+
+// Admin user endpoint error response
+export type AdminUserError = {
     status: number;
     error: string;
 };

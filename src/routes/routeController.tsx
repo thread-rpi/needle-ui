@@ -13,15 +13,15 @@ const Publications = lazy(() => import("../pages/Publications"));
 const Calendar = lazy(() => import("../pages/Calendar"));
 const Health = lazy(() => import("../pages/Health"));
 const NotFound = lazy(() => import("../pages/NotFound"));
-const Login = lazy(() => import("../pages/admin/AdminLogin"));
+const AdminLogin = lazy(() => import("../pages/admin/AdminLogin"));
 const AdminHome = lazy(() => import("../pages/admin/AdminHome"));
 
 export default function RouteController() {
   return (
     <Suspense fallback={<Loader />}>
       <Routes>
-        {/* Public login route - outside Layout */}
-        <Route path={routes.login} element={<Login />} />
+        {/* admin routes */}
+        <Route path={routes.login} element={<AdminLogin />} />
         
         {/* Protected admin route - outside Layout */}
         <Route

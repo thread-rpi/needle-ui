@@ -1,6 +1,17 @@
 import { useMutation, useQuery, type UseMutationResult, type UseQueryResult } from "@tanstack/react-query";
 import { apiGet, apiPost } from "./api";
-import type { HealthError, HealthResponse, LoginResponse, LoginError, LoginRequest } from "../types/queryTypes";
+import type { 
+  HealthError, 
+  HealthResponse, 
+  LoginResponse, 
+  LoginError, 
+  LoginRequest,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
+  RefreshTokenError,
+  AdminUserResponse,
+  AdminUserError,
+} from "../types/queryTypes";
 
 
 export interface RecentEvent { // types for each recent event object returned from api
@@ -56,5 +67,37 @@ async function loginRequest({ email, password }: LoginRequest): Promise<LoginRes
 export const useLogin = (): UseMutationResult<LoginResponse, LoginError, LoginRequest> => {
   return useMutation<LoginResponse, LoginError, LoginRequest>({
     mutationFn: loginRequest
+  });
+};
+
+// refresh token endpoint request
+async function refreshTokenRequest({ refresh_token }: RefreshTokenRequest): Promise<RefreshTokenResponse> {
+  return apiPost<RefreshTokenResponse, RefreshTokenError>({
+    endpoint: "auth/refresh",
+    body: { refresh_token },
+  });
+}
+
+// refresh token endpoint hook
+export const useRefreshToken = (): UseMutationResult<RefreshTokenResponse, RefreshTokenError, RefreshTokenRequest> => {
+  return useMutation<RefreshTokenResponse, RefreshTokenError, RefreshTokenRequest>({
+    mutationFn: refreshTokenRequest
+  });
+};
+
+// current user endpoint request
+async function getCurrentAdminUser(): Promise<AdminUserResponse> {
+  return apiGet<AdminUserResponse, AdminUserError>({ endpoint: "auth/me" });
+}
+
+// current user endpoint hook - only fetches if token exists
+export const useCurrentAdminUser = (enabled: boolean = true): UseQueryResult<AdminUserResponse, AdminUserError> => {
+  // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  
+  return useQuery<AdminUserResponse, AdminUserError>({
+    queryKey: ["currentAdminUser"],
+    queryFn: getCurrentAdminUser,
+    enabled: enabled, // Only fetch if enabled and token exists
+    retry: 1,
   });
 };

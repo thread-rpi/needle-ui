@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLogin } from "../../api/queries";
+import { useQueryClient } from "@tanstack/react-query";
+import { useLogin, useCurrentAdminUser } from "../../api/queries";
+import { useAuth } from "../../contexts/useAuth";
 import { routes } from "../../routes/routePaths";
 
 const AdminLogin = () => {
@@ -9,6 +11,8 @@ const AdminLogin = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const { setUser } = useAuth();
+  const queryClient = useQueryClient();
   const { 
     isSuccess: isLoginSuccess,
     data: loginData, 
@@ -17,6 +21,11 @@ const AdminLogin = () => {
     isPending: isLoginPending,
     mutate: loginMutate,
   } = useLogin();
+
+  // Fetch user data after successful login
+  // Always enabled, but will only fetch when token exists
+  const { data: userData } = useCurrentAdminUser(isLoginSuccess && !!loginData);
+  
 
   // Validate email format
   const isValidEmail = (email: string) => {
@@ -44,16 +53,28 @@ const AdminLogin = () => {
 
   // Handle successful login
   useEffect(() => {
+    console.log("loginData: ", loginData);
     if (isLoginSuccess && loginData) {
       // Store tokens
-      localStorage.setItem("token", loginData.accessToken);
-      if (loginData.refreshToken) {
-        localStorage.setItem("refreshToken", loginData.refreshToken);
+      localStorage.setItem("token", loginData.access_token);
+      if (loginData.refresh_token) {
+        localStorage.setItem("refresh_token", loginData.refresh_token);
       }
-      // Redirect to admin page after successful login
+      // Invalidate and refetch user query after tokens are stored
+      // This ensures the query runs with the new token
+      queryClient.invalidateQueries({ queryKey: ["currentAdminUser"] });
+    }
+  }, [isLoginSuccess, loginData, queryClient]);
+
+  // Handle user data after login
+  useEffect(() => {
+    console.log("userData: ", userData);
+    if (userData) {
+      setUser(userData);
+      // Redirect to admin page after user data is loaded
       navigate(routes.admin, { replace: true });
     }
-  }, [isLoginSuccess, loginData, navigate]);
+  }, [userData, setUser, navigate]);
 
   // Handle login errors
   useEffect(() => {
@@ -80,7 +101,10 @@ const AdminLogin = () => {
         )}
 
         {/* inputs */}
-        <div className="flex flex-col items-start gap-3 w-full">
+        <form id="login-form" onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin();
+        }} className="flex flex-col items-center gap-3 w-full">
           {/* email */}
           <div className="relative w-full h-[60px] flex items-center px-[17px]">
             <div className="absolute inset-0 bg-white rounded-[15px] shadow-[inset_0px_3px_6px_#0000004c]" />
@@ -104,18 +128,21 @@ const AdminLogin = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-        </div>
+
+          <button
+            type="submit"
+            form="login-form"
+            disabled={isLoginPending}
+            className="mt-2 flex w-auto h-auto items-center justify-center py-3 px-8 bg-thread-red rounded-full hover:bg-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <div className="font-bold text-white text-lg">
+              {isLoginPending ? "logging in..." : "enter"}
+            </div>
+          </button>
+        </form>
 
         {/* enter button */}
-        <button
-          onClick={handleLogin}
-          disabled={isLoginPending}
-          className="mt-2 flex w-auto h-auto items-center justify-center py-3 px-8 bg-thread-red rounded-full hover:bg-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <div className="font-bold text-white text-lg">
-            {isLoginPending ? "logging in..." : "enter"}
-          </div>
-        </button>
+        
       </div>
     </div>
   );
