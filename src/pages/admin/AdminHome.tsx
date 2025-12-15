@@ -1,24 +1,17 @@
-import { useAuth } from "../../contexts/useAuth";
-// import AdminUser from "../../types/adminTypes";
+import { Icon } from "@iconify/react";
 
 const AdminHome = () => {
-  const { user } = useAuth();
-  
   return (
-    <div className="w-full flex items-center justify-center py-8">
-      <div className="flex flex-col items-center gap-5">
-        <h1 className="text-4xl font-bold text-thread-red">Admin Home</h1>
-        {user &&
-          (Object.keys(user) as (keyof typeof user)[]).map((key) => (
-            <div className="w-max flex flex-col items-center justify-start" key={key as string}>
-              <div className="text-2xl font-bold text-thread-red w-max">{key}</div>
-              <div className="text-lg text-gray-700 w-max">{String(user[key])}</div>
-            </div>
-          ))}
+    <div className="w-full max-w-7xl min-h-dvh pt-27 px-11 mx-auto flex flex-col items-center justify-start">
+        <div className="w-full flex flex-row items-center gap-5">
+          <div className="text-3xl font-extrabold ml-6">EVENTS</div>
+          <button className="flex items-center gap-[6px] bg-thread-red  text-white font-bold px-4 h-[40px] rounded-2xl shadow-[0px_5px_10px_rgba(0,0,0,0.25)]">
+            <Icon icon="gridicons:dropdown" width="24px" height="24px" color='white'/>
+            <div className="text-xl font-bold">F25</div>
+          </button>
+          </div>
       </div>
-    </div>
   );
 };
 
 export default AdminHome;
-

@@ -50,6 +50,9 @@ export default function RouteController() {
           {/* catch-all 404 route */}
           <Route path="*" element={<NotFound />} />
         </Route>
+
+          <Route path="/admin" element={<AdminHome />} />
+
       </Routes>
     </Suspense>
   );

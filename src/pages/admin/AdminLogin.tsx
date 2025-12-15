@@ -101,13 +101,17 @@ const AdminLogin = () => {
         )}
 
         {/* inputs */}
-        <form id="login-form" onSubmit={(e) => {
-          e.preventDefault();
-          handleLogin();
-        }} className="flex flex-col items-center gap-3 w-full">
+        <form 
+          id="login-form" 
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }} 
+          className="flex flex-col items-center gap-3 w-full"
+        >
           {/* email */}
           <div className="relative w-full h-[60px] flex items-center px-[17px]">
-            <div className="absolute inset-0 bg-white rounded-[15px] shadow-[inset_0px_3px_6px_#0000004c]" />
+            <div className="absolute inset-0 bg-white rounded-[15px] shadow-[inset_0px_3px_6px_#0000004c]"/>
             <input
               type="email"
               placeholder="email"
@@ -119,7 +123,7 @@ const AdminLogin = () => {
 
           {/* password */}
           <div className="relative w-full h-[60px] flex items-center px-[17px]">
-            <div className="absolute inset-0 bg-white rounded-[15px] shadow-[inset_0px_3px_6px_#0000004c]" />
+            <div className="absolute inset-0 bg-white rounded-[15px] shadow-[inset_0px_3px_6px_#0000004c]"/>
             <input
               type="password"
               placeholder="password"
@@ -129,20 +133,16 @@ const AdminLogin = () => {
             />
           </div>
 
+          {/* enter button */}
           <button
             type="submit"
             form="login-form"
             disabled={isLoginPending}
             className="mt-2 flex w-auto h-auto items-center justify-center py-3 px-8 bg-thread-red rounded-full hover:bg-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className="font-bold text-white text-lg">
-              {isLoginPending ? "logging in..." : "enter"}
-            </div>
+            <div className="font-bold text-white text-lg">{isLoginPending ? "logging in..." : "enter"}</div>
           </button>
         </form>
-
-        {/* enter button */}
-        
       </div>
     </div>
   );
