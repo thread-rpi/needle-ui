@@ -6,6 +6,7 @@ import { Icon } from "@iconify/react";
 export default function MobileHeader() {
   const navigate = useNavigate();
   const [hamburgerMenuOpen, setHamburgerMenuOpen] = useState(false);
+  const menuTransitionDelay = 100;
 
   const handleMenuClick = () => {
     setHamburgerMenuOpen(!hamburgerMenuOpen);
@@ -80,7 +81,7 @@ export default function MobileHeader() {
                 : 'opacity-0'
             }`}
             style={{
-              transitionDelay: hamburgerMenuOpen ? '250 ms' : '0ms'
+              transitionDelay: hamburgerMenuOpen ? `${menuTransitionDelay}ms` : '0ms'
             }}
           >
             {'HOME'}
@@ -95,7 +96,7 @@ export default function MobileHeader() {
                   : 'opacity-0'
               }`}
               style={{
-                transitionDelay: hamburgerMenuOpen ? `${((index+1) * 50) + 250}ms` : '0ms'
+                transitionDelay: hamburgerMenuOpen ? `${((index+1) * 50) + menuTransitionDelay}ms` : '0ms'
               }}
             >
               {item.label.toUpperCase()}
