@@ -16,3 +16,8 @@ export const headerRoutes = [
   { label: "Calendar", path: routes.calendar, offset: "55%" },
   { label: "Publications", path: routes.publications, offset: "75%" },
 ];
+
+export const adminHeaderRoutes = [
+  { label: "events", icon: "material-symbols:event-rounded", path: routes.adminRoot },
+  { label: "members", icon: "wpf:group", path: routes.adminMembers },
+];
