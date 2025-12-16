@@ -4,11 +4,35 @@
   /* Color variables from Figma */
   /* Primary brand colors */
   --color-thread-red: #AF1E2D;
-  --color-thread-off-white:#f2f2f2;
+  --color-thread-off-white: #F2F2F2;
+  --color-thread-red-opposite: #1EAFA0;
+
+  --animate-admin-mobile-header-ticker-1: ticker-1 30s linear infinite -30s;
+  @keyframes ticker-1 {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  --animate-admin-mobile-header-ticker-2: ticker-2 30s linear infinite -15s;
+  @keyframes ticker-2 {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-200%);
+    }
+  }
 }
 
 /* gabarito as base font globally */
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
   body {
     font-family: "Gabarito", sans-serif;
   }

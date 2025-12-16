@@ -8,10 +8,11 @@ import '../index.css'
 
 export default function Layout() {
   const { isMobile } = useViewport();
+  const header = isMobile ? <MobileHeader /> : <Header />;
 
   return (
     <div className='w-full min-h-dvh flex bg-white'>
-        {isMobile ? <MobileHeader /> : <Header />}
+        {header}
         <main className='flex-1'>
           <Suspense fallback={<Loader />}>
             <Outlet />

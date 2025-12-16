@@ -84,7 +84,7 @@ const AdminLogin = () => {
   }, [isLoginError, loginError]);
 
   return (
-    <div className="min-h-screen w-full bg-thread-off-white flex items-center justify-center">
+    <div className="min-h-dvh w-full bg-thread-off-white flex items-center justify-center">
       <div className="flex flex-col w-1/2 min-w-max max-w-[400px] items-center gap-5">
         {/* NEEDLE */}
         <div
