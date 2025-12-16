@@ -41,12 +41,14 @@ export default function AdminMobileHeader() {
           >
             <div className="w-full h-full overflow-hidden">
               <div className="w-full h-full flex flex-row">
-                {Array.from({ length: 2 }).map((_, index) => (
-                  <div key={index} className={`w-max h-full flex flex-row items-end gap-3 whitespace-nowrap px-1.5 animate-admin-mobile-header-ticker-${index === 0 ? '1' : '2'}`}>
-                    <div className="w-max h-full text-3xl font-extrabold text-thread-red whitespace-nowrap"> {user?.name} </div>
-                    <div className="w-max text-2xl font-bold"> {user?.role.toLowerCase()} </div>
-                  </div>
-                ))}
+                <div className={`w-max h-full flex flex-row items-end gap-3 whitespace-nowrap px-1.5 animate-admin-mobile-header-ticker-1`}>
+                  <div className="w-max h-full text-3xl font-extrabold text-thread-red whitespace-nowrap"> {user?.name} </div>
+                  <div className="w-max text-2xl font-bold"> {user?.role.toLowerCase()} </div>
+                </div>
+                <div className={`w-max h-full flex flex-row items-end gap-3 whitespace-nowrap px-1.5 animate-admin-mobile-header-ticker-2`}>
+                  <div className="w-max h-full text-3xl font-extrabold text-thread-red whitespace-nowrap"> {user?.name} </div>
+                  <div className="w-max text-2xl font-bold"> {user?.role.toLowerCase()} </div>
+                </div>
               </div>
             </div>
             {/* Logout dropdown */}
