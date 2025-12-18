@@ -1,25 +1,30 @@
+import { useState } from "react";
+import RecentEventsPopup from "../components/RecentEventsPopup";
+import LoopTap from "../assets/LoopTap.svg";
+import { useViewport } from "../contexts/useViewport";
 import type { EventType } from "../types/eventTypes";
 import { generateCardGrid, getResponsiveWidth } from "../helpers/recentContentGrid";
 // import { RecentContentThread } from "../components/RecentContentThread";
-import { useGetRecentContent } from "../api/queries";
+import { useGetPastEvents } from "../api/queries";
 import { RecentContentCard } from "../components/recentContentCard";
 
 const Home = () => {
+  const { isMobile } = useViewport();
+  const [recentEventsPopupOpen, setRecentEventsPopupOpen] = useState(false);
+  const handleClick = () => setRecentEventsPopupOpen(!recentEventsPopupOpen);
+
   const { 
     isSuccess: isRecentContentSuccess,
     isLoading: isRecentContentLoading,
     isError: isRecentContentError,
     data: recentContentData,
     error: recentContentError,
-  } = useGetRecentContent();
+  } = useGetPastEvents();
   console.log(recentContentData?.data || recentContentError?.error);
   const cardRows = generateCardGrid(recentContentData?.data || []);
   
   return (
-    <div className="w-full h-full pt-15 flex justify-center">
-      {/* <RecentContentThread 
-        className="absolute -z-10 w-[128vw] shadow-[0_4px_7px_0_rgba(169,0,0,0.60)]"
-      /> */}
+    <div className="relative w-full h-screen pt-15 flex justify-center">
       {isRecentContentSuccess && (
         <div className="flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-8 lg:px-12 pb-6">
           {cardRows.map((row, rowIndex) => (
@@ -48,7 +53,24 @@ const Home = () => {
         <div className="w-full h-min text-center text-black text-[2rem]">Please try again later.</div>
       </div>
       )}
+     {!isMobile && ( <button
+        onClick={handleClick}
+        className="absolute cursor-pointer z-10"
+        style={{
+          right: '0%',
+          top: '73.4%',
+          height: '23.22vh',
+          width: 'auto',
+        }}
+      >
+        <img src={LoopTap} alt="The Loop" className="w-auto h-full" />
+      </button>
+      )}
+      {!isMobile && ( 
+      <RecentEventsPopup isOpen={recentEventsPopupOpen} />
+      )}
     </div>
-  )
-}
+  );
+};
+
 export default Home;

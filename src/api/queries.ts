@@ -1,44 +1,105 @@
-import { useQuery, type UseQueryResult } from "@tanstack/react-query";
-import { apiGet } from "./api";
-import type { EndpointError, HealthResponse, RecentContentResponse } from "../types/queryTypes";
-import recentContent from "../helpers/recentContent.json";
+import { useMutation, useQuery, type UseMutationResult, type UseQueryResult } from "@tanstack/react-query";
+import { apiGet, apiPost } from "./api";
+import { API_ROUTES } from "./apiRoutes";
+import type { 
+  HealthResponse,
+  HealthError,
+  LoginResponse, 
+  LoginError, 
+  LoginRequest,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
+  RefreshTokenError,
+  AdminUserResponse,
+  AdminUserError,
+  EventOverviewResponse,
+  EventOverviewError,
+  PastEventsResponse,
+  PastEventsError,
+} from "../types/queryTypes";
 import type { RecentContent } from "../types/eventTypes";
 
-// REQUESTS ////////////////////////////////////////////////////////////
 
 // health endpoint request
 async function getHealth(): Promise<HealthResponse> {
-  try {
-    return apiGet<HealthResponse, EndpointError>({endpoint: 'health'});
-  } catch (err) {
-    throw err as EndpointError;
-  }
+  return apiGet<HealthResponse, HealthError>({endpoint: API_ROUTES.health});
 }
 
-// recentContent endpoint request
-async function getRecentContent(): Promise<RecentContentResponse> {
-  try {
-    // return apiGet<RecentContentResponse, EndpointError>({endpoint: 'events/recentContent'});
-    return { data: recentContent as unknown as RecentContent[] };
-  } catch (err) {
-    throw err as EndpointError;
-  }
-}
-
-// HOOKS //////////////////////////////////////////////////////////////
-
-// Health endpoint hook 
-export const useGetHealth = (): UseQueryResult<HealthResponse, EndpointError> => {
-  return useQuery<HealthResponse, EndpointError>({
+// health endpoint hook 
+export const useGetHealth = (): UseQueryResult<HealthResponse, HealthError> => {
+  return useQuery<HealthResponse, HealthError>({
     queryKey: ["health"],
     queryFn: () => getHealth()
   });
 }
 
-// recentContent endpoint hook 
-export const useGetRecentContent = (): UseQueryResult<RecentContentResponse, EndpointError> => {
-  return useQuery<RecentContentResponse, EndpointError>({
-    queryKey: ["recentContent"],
-    queryFn: () => getRecentContent()
+// event overview endpoint request
+async function getEventOverview(): Promise<EventOverviewResponse> {
+  return apiGet<EventOverviewResponse, EventOverviewError>({endpoint: API_ROUTES.eventOverview});
+};
+
+// event overview endpoint hook - only fetches if enabled (component is open/active)
+export const useEventOverview = (enabled: boolean = true): UseQueryResult<EventOverviewResponse, EventOverviewError> => {
+  return useQuery<EventOverviewResponse, EventOverviewError>({
+    queryKey: ['eventOverview'],
+    queryFn: getEventOverview,
+    enabled: enabled,
+  });
+};
+
+// login endpoint request
+async function loginRequest({ email, password }: LoginRequest): Promise<LoginResponse> {
+  return apiPost<LoginResponse, LoginError>({
+    endpoint: API_ROUTES.login,
+    body: { email, password },
+  });
+}
+
+// login endpoint hook - mutation only executes when mutate() is called with valid credentials
+export const useLogin = (): UseMutationResult<LoginResponse, LoginError, LoginRequest> => {
+  return useMutation<LoginResponse, LoginError, LoginRequest>({
+    mutationFn: loginRequest
+  });
+};
+
+// refresh token endpoint request
+async function refreshTokenRequest({ refresh_token }: RefreshTokenRequest): Promise<RefreshTokenResponse> {
+  return apiPost<RefreshTokenResponse, RefreshTokenError>({
+    endpoint: API_ROUTES.refreshToken,
+    body: { refresh_token },
+  });
+}
+
+// refresh token endpoint hook
+export const useRefreshToken = (): UseMutationResult<RefreshTokenResponse, RefreshTokenError, RefreshTokenRequest> => {
+  return useMutation<RefreshTokenResponse, RefreshTokenError, RefreshTokenRequest>({
+    mutationFn: refreshTokenRequest
+  });
+};
+
+// current user endpoint request
+async function getCurrentAdminUser(): Promise<AdminUserResponse> {
+  return apiGet<AdminUserResponse, AdminUserError>({ endpoint: API_ROUTES.adminUser });
+}
+
+// current user endpoint hook - only fetches if token exists
+export const useCurrentAdminUser = (enabled: boolean = true): UseQueryResult<AdminUserResponse, AdminUserError> => {
+  return useQuery<AdminUserResponse, AdminUserError>({
+    queryKey: ["currentAdminUser"],
+    queryFn: getCurrentAdminUser,
+    enabled: enabled
+  });
+};
+
+// past events endpoint request
+async function getPastEvents(): Promise<PastEventsResponse> {
+  return apiGet<PastEventsResponse, PastEventsError>({ endpoint: API_ROUTES.pastEvents });
+}
+
+// past events endpoint hook 
+export const useGetPastEvents = (): UseQueryResult<PastEventsResponse, PastEventsError> => {
+  return useQuery<PastEventsResponse, PastEventsError>({
+    queryKey: ["pastEvents"],
+    queryFn: () => getPastEvents()
   });
 }

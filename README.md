@@ -1,69 +1,57 @@
-# React + TypeScript + Vite
+<img width="322.7875" height="403.1125" alt="threadBranding-WordmarkFinal" src="https://github.com/user-attachments/assets/98aa7920-4cd3-45a1-9f02-efdd72f73abb" />
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the Needle frontend repository - this repository contains the UI code for the Needle web app. Read the full documentation here:
 
-Currently, two official plugins are available:
+# Getting Started - Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## **Prerequisites**
 
-## Expanding the ESLint configuration
+Before you start, make sure you have the following installed:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js (at least version 12.x)
+- npm (usually comes with Node.js)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+You can check your Node.js and npm versions by running **`node -v`** and **`npm -v`** in your terminal.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## **Cloning the Repository**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+First, clone the repository to your local machine:
+
+```bash
+git clone git@github.com:thread-rpi/needle-ui.git
+cd your-project-directory
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## **Installing Dependencies**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+This frontend repo has dependencies that you'll need to install to run properly on your machine:
+    
+    ```bash
+    npm install
+    ```
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## **Running the Application**
+
+To locally run a frontend server, use the command:
+
+```bash
+npm run dev
 ```
+
+This command is configured in the root **`package.json`** file. By default, the server runs on **`localhost:5173`**.
+
+## **Exploring the Application**
+
+After starting the application, you can access it at http://localhost:5173
+
+Feel free to explore and interact with the React frontend.
+
+## **Next Steps**
+
+Now that your environment is set up, you're ready to start developing! Here are a few suggestions for next steps:
+
+- Explore the documentation and components for more detailed information on the specifics of the application.
+- Review the existing components and routes to get a feel for the application structure.
+- Begin adding new features or modifying existing ones.
+
+Thank you for contributing to our project! If you encounter any issues, please report them on our issues tracker or directly to ths22115.
