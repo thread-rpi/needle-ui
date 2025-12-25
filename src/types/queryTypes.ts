@@ -1,6 +1,6 @@
 import type { AdminUser } from "./adminTypes";
-import type { OverviewEvent } from "./homeTypes";
-import type { RecentContent } from "./eventTypes";
+import type { OverviewEvent } from "./eventTypes";
+import type { PastEvent } from "./eventTypes";
 
 // Health endpoint successful response
 export type HealthResponse = {
@@ -68,7 +68,7 @@ export type EventOverviewError = {
 
 // Past events endpoint successful response
 export type PastEventsResponse = {
-  past_events: RecentContent[];
+  past_events: PastEvent[];
 };
 
 // Past events endpoint error response

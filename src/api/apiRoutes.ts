@@ -4,4 +4,5 @@ export const API_ROUTES = {
   login: 'auth/login',
   refreshToken: 'auth/refresh-token',
   adminUser: 'auth/me',
+  pastEvents: 'past-events',
 };

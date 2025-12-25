@@ -1,15 +1,14 @@
-import recentContent from "./recentContent.json";
+import type { PastEvent } from "../types/eventTypes";
 
-export type CardItem = typeof recentContent[0];
 
-export type GridCard = {
-  item: CardItem;
+export type GridEvent = {
+  event: PastEvent;
   index: number;
   width: string;
   height: string;
 };
 
-export type GridRow = GridCard[];
+export type GridRow = GridEvent[];
 
 /*
  Pattern:
@@ -21,7 +20,7 @@ export type GridRow = GridCard[];
  - Card 10: Full width, 1/2h
  after first cycle all cards use 1/2h height
  */
-export const generateCardGrid = (content: typeof recentContent): GridRow[] => {
+export const generatePastEventGrid = (content: PastEvent[]): GridRow[] => {
   const rows: GridRow[] = [];
   
   for (let i = 0; i < content.length; i++) {
@@ -84,7 +83,7 @@ export const generateCardGrid = (content: typeof recentContent): GridRow[] => {
       rows.push([]);
     }
     
-    rows[rows.length - 1].push({ item, index: i, width, height });
+    rows[rows.length - 1].push({ event: item, index: i, width, height });
   }
   
   return rows;

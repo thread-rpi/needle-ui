@@ -17,7 +17,6 @@ import type {
   PastEventsResponse,
   PastEventsError,
 } from "../types/queryTypes";
-import type { RecentContent } from "../types/eventTypes";
 
 
 // health endpoint request

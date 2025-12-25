@@ -3,10 +3,10 @@ import RecentEventsPopup from "../components/RecentEventsPopup";
 import LoopTap from "../assets/LoopTap.svg";
 import { useViewport } from "../contexts/useViewport";
 import type { EventType } from "../types/eventTypes";
-import { generateCardGrid, getResponsiveWidth } from "../helpers/recentContentGrid";
+import { generatePastEventGrid, getResponsiveWidth } from "../helpers/pastEventGrid";
 // import { RecentContentThread } from "../components/RecentContentThread";
 import { useGetPastEvents } from "../api/queries";
-import { RecentContentCard } from "../components/recentContentCard";
+import { PastEventCard } from "../components/PastEventCard";
 
 const Home = () => {
   const { isMobile } = useViewport();
@@ -20,21 +20,22 @@ const Home = () => {
     data: recentContentData,
     error: recentContentError,
   } = useGetPastEvents();
-  console.log(recentContentData?.data || recentContentError?.error);
-  const cardRows = generateCardGrid(recentContentData?.data || []);
+  console.log(recentContentData?.past_events || recentContentError?.error);
+  const pastEventRows = generatePastEventGrid(recentContentData?.past_events || []);
   
   return (
     <div className="relative w-full h-screen pt-15 flex justify-center">
       {isRecentContentSuccess && (
         <div className="flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-8 lg:px-12 pb-6">
-          {cardRows.map((row, rowIndex) => (
+          {pastEventRows.map((row, rowIndex) => (
             <div key={rowIndex} className="flex flex-col md:flex-row gap-10 w-full min-w-0">
-              {row.map(({ item, width, height }) => (
-                <div key={item.id} className={`${getResponsiveWidth(width)} ${height} min-w-0`}>
-                  <RecentContentCard 
-                    title={item.title} 
-                    type={item.type as EventType} 
-                    date={item.date} 
+              {row.map(({ event, width, height }) => (
+                <div key={event.id} className={`${getResponsiveWidth(width)} ${height} min-w-0`}>
+                  <PastEventCard 
+                    title={event.title} 
+                    type={event.type as EventType} 
+                    date={event.date} 
+                    path={event.path}
                   />
                 </div>
               ))}
