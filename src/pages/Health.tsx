@@ -13,11 +13,11 @@ const Health = () => {
       <div className='h-max w-max'>
         <div className={`text-[64px] text-white font-bold`}>
           {(isLoading && 'loading...') || 
-          ('API is ' + ((isSuccess && data.data + '! :D') || isError && 'unhealthy! :C'))
+          ('API is ' + ((isSuccess && data?.state + '! :D') || isError && 'unhealthy! :C'))
           }
         </div>
         <div className='text-[24px] text-gray-300'>
-          {isSuccess && 'No issues to report.' || isError && error.error}
+          {isSuccess && 'No issues to report.' || isError && error?.error}
         </div>
       </div>
     </div>
