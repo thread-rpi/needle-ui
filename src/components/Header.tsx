@@ -26,7 +26,7 @@ export default function Header() {
               style={{
                 fontSize: "14px",
                 fill: "#FFFFFF",
-                fontWeight: 800,
+                fontWeight: 650,
                 dominantBaseline: "middle",
               }}
             >
