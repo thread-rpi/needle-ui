@@ -15,42 +15,40 @@ export default function AdminHeader() {
   };
 
   return (
-    <div className="z-200 w-full h-max fixed top-5.5 left-0 flex justify-center overflow-visible">
-      <div className="w-[93%] h-14 bg-white rounded-2xl shadow-[0px_5px_10px_0px_rgba(0,0,0,0.18)] px-6 py-3 flex items-center justify-between overflow-visible">
+    <div className="z-200 w-full h-max fixed top-0 left-0 flex justify-center overflow-visible ">
+    <div className="w-full h-14 flex items-center justify-center bg-thread-off-white border-b-1 border-black px-5 py-2.5 overflow-visible">
+      <div className="w-full h-full flex flex-row items-center justify-between gap-3">
+
         {/* header left - navbar */}
-        <div className="flex flex-row items-center gap-5">
-          <div className="font-extrabold text-2xl text-thread-red uppercase">NEEDLE</div>
-          <div className="relative w-max h-max flex items-center p-1.5 gap-.5">
-            <div className="absolute inset-0 bg-thread-off-white rounded-2xl shadow-[inset_0px_3px_6px_#0000004c]"/>
-            {adminHeaderRoutes.map((route) => (
-            <Link to={route.path} key={route.label} onClick={() => setActiveRoute(route.path)}>
-              <div className={`z-10 relative text-md font-bold text-thread-red px-3 py-1 rounded-xl flex items-center justify-center gap-1 transition-all duration-300
-                ${activeRoute === route.path ? 'bg-thread-red text-white' : ''}`}>
-                <div className={`flex items-center justify-center ${activeRoute === route.path ? 'opacity-100 w-5 h-5' : 'opacity-0 w-0 h-0'} transition-all duration-300`}>
-                  <Icon icon={route.icon} color={'white'}/>
+        <div className="w-max min-w-0 flex flex-row items-center justify-start gap-0.5 shrink-0">
+          <div className="font-extrabold text-2xl h-max py-4 pr-2 text-thread-red uppercase">NEEDLE</div>
+          {adminHeaderRoutes.map((route) => (
+            <Link className="w-max h-full" to={route.path} key={route.label} onClick={() => setActiveRoute(route.path)}>
+              <div className={`z-10 relative text-xl font-bold text-black px-2 py-1.5 flex items-center justify-center transition-all duration-300
+                ${activeRoute === route.path ? 'text-thread-red scale-125' : 'text-black'}`}>
+                <div className={`flex items-center justify-center transition-all duration-300`}>
+                  <Icon inline={true} icon={route.icon}/>
                 </div>
-                {route.label}
               </div>
             </Link>
-            ))}
-          </div>
+          ))}
         </div>
 
-        {/* header right - current user info */}
+        {/* header middle - current user info (centered) */}
         <div 
-          className="relative w-max h-max flex flex-col self-start items-end justify-start overflow-visible"
+          className="relative flex flex-col items-center self-start overflow-visible min-w-0"
           onMouseEnter={() => setLogoutVisible(true)}
           onMouseLeave={() => setLogoutVisible(false)}
         >
-          <div className="flex flex-row items-end gap-1.5 w-auto">
-            <div className="font-bold text-lg align-text-bottom"> {user?.role.toLowerCase()} </div>
-            <div className="font-extrabold text-2xl text-thread-red"> {user?.name.split(' ')[0].toUpperCase()} </div>
+          <div className="w-auto h-10 flex flex-row items-center gap-1.5 justify-center">
+            <div className="font-bold text-lg align-text-bottom w-max"> {user?.role.toLowerCase()} </div>
+            <div className="font-extrabold text-xl text-thread-red w-max"> {user?.name} </div>
           </div>
           
           {/* Logout dropdown */}
           <div 
-            className={`mt-5 bg-white rounded-xl shadow-[0px_5px_10px_0px_rgba(0,0,0,0.18)] py-2 min-w-[120px] transition-all duration-250 ease-in-out ${
-              logoutVisible ? 'z-0 opacity-100 translate-y-0' : 'z-[-10] opacity-0 -translate-y-10 pointer-events-none'
+            className={`w-max mt-5 bg-white border-1 border-black py-1.5 transition-all duration-250 ease-in-out ${
+              logoutVisible ? 'z-0 opacity-100 translate-y-0' : 'z-[-10] opacity-0 -translate-y-5 pointer-events-none'
             }`}
           >
             <button
@@ -62,7 +60,20 @@ export default function AdminHeader() {
             </button>
           </div>
         </div>
+
+        {/* header right - search bar */}
+        <div className="w-max min-w-0 flex flex-row items-center gap-2 shrink-0">
+          <div className="flex items-center border-b border-black bg-transparent">
+            <Icon icon="fluent:search-24-filled" className="w-6 h-6 text-black shrink-0" />
+            <input
+              type="text"
+              placeholder=""
+              className="w-40 pl-2 py-1.5 bg-transparent border-none outline-none text-base placeholder:text-black/50"
+            />
+          </div>
+        </div>
       </div>
     </div>
+  </div>
   );
 }
