@@ -1,7 +1,7 @@
-import { useViewport } from "../contexts/useViewport";
+// import { useViewport } from "../contexts/useViewport";
 
 const Home = () => {
-  const { isMobile } = useViewport();
+  // const { isMobile } = useViewport();
 
   return (
     <div className="relative w-full h-full min-h-dvh py-18 px-12">
