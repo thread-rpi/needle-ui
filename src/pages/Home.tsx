@@ -24,7 +24,7 @@ const Home = () => {
   const pastEventRows = generatePastEventGrid(recentContentData?.past_events || []);
   
   return (
-    <div className="relative w-full h-screen pt-15 flex justify-center">
+    <div className="relative w-full h-max min-h-dvh flex justify-center">
       {isRecentContentSuccess && (
         <div className="flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-8 lg:px-12 pb-6">
           {pastEventRows.map((row, rowIndex) => (

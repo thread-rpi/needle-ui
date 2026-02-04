@@ -8,6 +8,7 @@ export const routes = {
   login: '/login',
   adminRoot: '/admin',
   adminMembers: '/admin/members',
+  adminImages: '/admin/images',
 };
 
 export const headerRoutes = [
@@ -20,4 +21,5 @@ export const headerRoutes = [
 export const adminHeaderRoutes = [
   { label: "events", icon: "material-symbols:event-rounded", path: routes.adminRoot },
   { label: "members", icon: "wpf:group", path: routes.adminMembers },
+  { label: "images", icon: "material-symbols:image-rounded", path: routes.adminImages },
 ];
