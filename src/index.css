@@ -30,9 +30,9 @@
 
 /* gabarito as base font globally */
 @layer base {
-  html {
+  /* html {
     scrollbar-gutter: stable;
-  }
+  } */
   body {
     font-family: "Gabarito", sans-serif;
   }

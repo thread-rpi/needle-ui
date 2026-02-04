@@ -17,6 +17,7 @@ const AdminLogin = lazy(() => import("../pages/admin/AdminLogin"));
 const AdminHome = lazy(() => import("../pages/admin/AdminHome"));
 const AdminLayout = lazy(() => import("../pages/admin/AdminLayout"));
 const AdminMembers = lazy(() => import("../pages/admin/AdminMembers"));
+const AdminImages = lazy(() => import("../pages/admin/AdminImages"));
 
 export default function RouteController() {
   return (
@@ -36,6 +37,7 @@ export default function RouteController() {
         >
           <Route index element={<AdminHome />} />
           <Route path={routes.adminMembers} element={<AdminMembers />} />
+          <Route path={routes.adminImages} element={<AdminImages />} />
         </Route>
 
         {/* visitor routes */}

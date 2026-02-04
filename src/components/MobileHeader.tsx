@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { headerRoutes, routes } from "../routes/routePaths";
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import mobileHeaderLogo from "../assets/mobile-header-logo.svg";
 
 export default function MobileHeader() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function MobileHeader() {
 
   return (
     <header 
-      className={`z-200 w-full fixed top-0 left-0 flex items-center justify-between p-7 transition-all duration-300 ease-in-out mix-blend-exclusion
+      className={`z-200 w-full h-26 fixed top-0 left-0 flex items-center justify-between py-6 px-8 transition-all duration-300 ease-in-out mix-blend-exclusion
         
      `}
      >
@@ -60,10 +61,16 @@ export default function MobileHeader() {
       </button>
 
       {/* THE THREAD text */}
-      <div 
+      {/* <div 
         className={`z-50 font-bold text-2xl text-white tracking-[1.28px] whitespace-nowrap relative font-futura transition-all duration-300 mix-blend-exclusion`}
         onClick={() => handleNavClick(routes.root)}
-      >THE THREAD</div>
+      >THE THREAD</div> */}
+      <img 
+        src={mobileHeaderLogo} 
+        alt="Thread logo" 
+        className="z-50 w-auto h-full object-contain cursor-pointer mix-blend-exclusion"
+        onClick={() => navigate(routes.root)}
+      />
 
       {/* dropdown menu */}
       <div className={`fixed top-0 left-0 pb-20 px-10 w-full h-full bg-white z-25 flex flex-col items-start justify-end transition-all duration-300 ease-in-out mix-blend-normal ${
