@@ -3,10 +3,10 @@ import type { EventType } from "../types/eventTypes";
 import { Icon } from "@iconify/react";
 
 interface PastEventCardProps {
-  title: string
-  type: EventType
-  date: string
-  path: string
+  title: string;
+  type: EventType;
+  date: string;
+  cover_image_path: string;
 }
 
 const iconTypes: Record<EventType, string> = {
@@ -15,17 +15,16 @@ const iconTypes: Record<EventType, string> = {
   external: "uil:globe",
 };
 
-export const PastEventCard = ({ title, type, date, path }: PastEventCardProps) => {
+export const PastEventCard = ({ title, type, date, cover_image_path }: PastEventCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const coverImagePath = import.meta.env.VITE_CLOUDFRONT_HOST + path + '/0/og.jpg';
-  console.log(coverImagePath);
-
+  const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + cover_image_path;
+  console.log(coverImageUrl);
   return (
     <div className={"relative w-full h-full bg-[#818181] rounded-4xl overflow-hidden"} 
     onMouseEnter={() => setIsHovered(true)} 
     onMouseLeave={() => setIsHovered(false)}
     >
-      <img src={coverImagePath} alt={title} className="absolute top-0 left-0 w-full h-full object-cover rounded-4xl" />
+      <img src={coverImageUrl} alt={title} className="absolute top-0 left-0 w-full h-full object-cover rounded-4xl" />
       <div className={`z-10 w-full h-full rounded-4xl mask-t-from-0% mask-t-to-100% bg-black  
         transition-all duration-250 ${isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'}
         flex flex-col justify-end px-12 py-6 text-white

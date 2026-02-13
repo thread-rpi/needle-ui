@@ -35,7 +35,7 @@ const Home = () => {
                     title={event.title} 
                     type={event.type as EventType} 
                     date={event.date} 
-                    path={event.path}
+                    cover_image_path={event.cover_image_path}
                   />
                 </div>
               ))}

@@ -13,7 +13,7 @@ export default function Layout() {
   return (
     <div className='w-full min-h-dvh flex bg-white'>
         {header}
-        <main className='flex-1'>
+        <main className={`flex-1 ${isMobile ? 'my-24' : 'my-15'}`}>
           <Suspense fallback={<Loader />}>
             <Outlet />
           </Suspense>

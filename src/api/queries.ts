@@ -90,7 +90,7 @@ export const useCurrentAdminUser = (enabled: boolean = true): UseQueryResult<Adm
   });
 };
 
-// past events endpoint request
+// past events endpoint request - using mock data (API call commented out)
 async function getPastEvents(): Promise<PastEventsResponse> {
   return apiGet<PastEventsResponse, PastEventsError>({ endpoint: API_ROUTES.pastEvents });
 }
