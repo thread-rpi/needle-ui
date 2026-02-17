@@ -57,7 +57,7 @@ export type Image = {
 
 /** Past event shape used by UI (id + cover_image_path for display) */
 export type PastEvent = {
-  id: string;
+  _id: string;
   title: string;
   date: string;
   type: EventType;
