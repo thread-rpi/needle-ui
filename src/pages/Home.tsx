@@ -2,11 +2,9 @@ import { useState } from "react";
 import RecentEventsPopup from "../components/RecentEventsPopup";
 import LoopTap from "../assets/LoopTap.svg";
 import { useViewport } from "../contexts/useViewport";
-import type { EventType } from "../types/eventTypes";
-import { generatePastEventGrid, getResponsiveWidth } from "../helpers/pastEventGrid";
-// import { RecentContentThread } from "../components/RecentContentThread";
+import { generatePastEventGrid } from "../helpers/pastEventGrid";
+import { GridRowRenderer } from "../helpers/gridRowRenderer";
 import { useGetPastEvents } from "../api/queries";
-import { PastEventCard } from "../components/PastEventCard";
 
 const Home = () => {
   const { isMobile } = useViewport();
@@ -21,25 +19,15 @@ const Home = () => {
     error: recentContentError,
   } = useGetPastEvents();
   console.log(recentContentData?.past_events || recentContentError?.error);
-  const pastEventRows = generatePastEventGrid(recentContentData?.past_events || []);
+  const pastEvents = recentContentData?.past_events || [];
+  const pastEventRows = generatePastEventGrid(Array(17).fill(pastEvents).flat());
   
   return (
     <div className="relative w-full h-max min-h-dvh flex justify-center">
       {isRecentContentSuccess && (
         <div className="flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-8 lg:px-12 pb-6">
           {pastEventRows.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex flex-col md:flex-row gap-10 w-full min-w-0">
-              {row.map(({ event, width, height }) => (
-                <div key={event.id} className={`${getResponsiveWidth(width)} ${height} min-w-0`}>
-                  <PastEventCard 
-                    title={event.title} 
-                    type={event.type as EventType} 
-                    date={event.date} 
-                    cover_image_path={event.cover_image_path}
-                  />
-                </div>
-              ))}
-            </div>
+            <GridRowRenderer key={rowIndex} row={row} />
           ))}
         </div>
       )}
