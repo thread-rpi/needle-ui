@@ -1,13 +1,10 @@
 import { useState } from "react";
-import type { EventType } from "../types/eventTypes";
+import type { EventType, PastEvent } from "../types/eventTypes";
 import { Icon } from "@iconify/react";
+import { useViewport } from "../contexts/useViewport";
+import { CARD_EXTENSION } from "../helpers/pastEventGrid";
 
-interface PastEventCardProps {
-  title: string;
-  type: EventType;
-  date: string;
-  cover_image_path: string;
-}
+type PastEventCardProps = PastEvent;
 
 const iconTypes: Record<EventType, string> = {
   shoot: "mage:camera-fill",
@@ -15,42 +12,53 @@ const iconTypes: Record<EventType, string> = {
   external: "uil:globe",
 };
 
-export const PastEventCard = ({ title, type, date, cover_image_path }: PastEventCardProps) => {
-  const [isHovered, setIsHovered] = useState(true);
+export const PastEventCard = ({ title, type, date, cover_image_path, location }: PastEventCardProps) => {
+  const { isMobile } = useViewport();
+  const [isHovered, setIsHovered] = useState(false);
+  const showHovered = isMobile ? true : isHovered;
   const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + cover_image_path;
-  console.log(coverImageUrl);
   return (
-    <div className={"relative w-full h-full bg-[#818181] rounded-4xl overflow-hidden"} 
-    onMouseEnter={() => setIsHovered(true)} 
-    onMouseLeave={() => setIsHovered(false)}
+    <div
+      className={`relative w-full flex flex-col bg-black rounded-4xl overflow-hidden 
+        transition-all ease-in-out ${showHovered ? `h-[calc(100%+${CARD_EXTENSION})] duration-200 delay-80` : `h-[calc(100%+0rem)] duration-300 delay-0`} `}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <img src={coverImageUrl} alt={title} className="absolute top-0 left-0 w-full h-full object-cover rounded-4xl" />
-      <div className={`z-10 w-full h-full rounded-4xl mask-t-from-0% mask-t-to-100% bg-black  
-        transition-all duration-250 ${isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-        flex flex-col justify-end px-12 py-6 text-white
-        md:px-15 md:py-8 `}>
-        <div className="flex flex-col justify-center items-start gap-1 w-max h-min overflow-clip">
-          <div className="flex flex-row justify-start items-center gap-2 text-xl md:text-[36px]">
-            <Icon icon={iconTypes[type.toLowerCase() as EventType]} inline={true}/>
-            <h3 className="font-bold">
-              {title}
-            </h3>
-          </div>
-          {/* <div className="w-6 h-6 md:w-9 md:h-9 flex items-center justify-center text-[90px]">
-            <Icon icon={iconTypes[type.toLowerCase() as EventType]} inline={true}/>
-          </div> */}
-          <div className="flex flex-col justify-start items-start gap-1">
-            {/* <h3 className="text-xl md:text-[36px] font-bold">{title}</h3> */}
-            <p className="text-xs text-gray-500">
+      {/* Image: 2:3 ratio */}
+      <div className="absolute top-0 left-0 w-full aspect-[3/2] shrink-0">
+        <img
+          src={coverImageUrl}
+          alt={title}
+          className="absolute inset-0 w-full h-full object-cover rounded-t-4xl"
+        />
+      </div>
+      {/* Mask overlay: bottom 50% of image + 40px details area (mask ~42% = 50% of image) */}
+      <div
+        className={`z-10 absolute w-full aspect-[3/2] shrink-0 bg-black
+        [mask-image:linear-gradient(to_bottom,transparent_0%_60%,black_100%)]
+        [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%_60%,black_100%)]
+        transition-all ${showHovered ? "opacity-100 duration-300 delay-0" : "opacity-0 pointer-events-none duration-200 delay-80"}`}
+      />
+      {/* Details area: 40px below image */}
+      <div 
+        className={`relative z-10 shrink-0 h-full flex justify-start items-end px-8 py-5 md:px-15
+        transition-all ${showHovered ? "opacity-100 duration-300 delay-0" : "opacity-0 pointer-events-none duration-200 delay-80"}`}
+      >
+         <div className="flex flex-row justify-start items-center gap-2 text-4xl text-white md:text-[36px]">
+          <Icon icon={iconTypes[type.toLowerCase() as EventType]} inline={true} />
+          <div className="flex flex-col justify-center items-start gap-0 overflow-clip text-white">
+            <h3 className="w-full font-bold text-lg truncate">{title}</h3>
+            <p className="text-[10px] md:text-xs text-gray-600 mt-[-0.15rem] md:mt-[-0.24rem]">
               {new Date(date).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
               })}
+              {` @ ${location}`}
             </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,34 +1,32 @@
 import type { EventType, PastEvent } from "../types/eventTypes";
 import { PastEventCard } from "../components/PastEventCard";
-import { getEventId } from "../utils/eventId";
-import { getResponsiveWidth, type GridRow } from "./pastEventGrid";
+import { CARD_ASPECT_CLASS, getResponsiveWidth, type CardSize, type GridRow } from "./pastEventGrid";
 
 export function GridRowRenderer({ row }: { row: GridRow }) {
+  const rowClass = "flex flex-col md:flex-row md:items-start gap-10 w-full min-w-0";
+  const colClass = "flex flex-col items-start gap-[26.67px] min-w-0 overflow-visible";
+
   const renderCard = ({
     event,
-    width,
-    height,
+    size,
+    extraClass = "",
   }: {
     event: PastEvent;
-    width: string;
-    height: string;
+    size: CardSize;
+    extraClass?: string;
   }) => (
     <div
-      key={getEventId(event)}
-      className={`${getResponsiveWidth(width)} ${height} min-w-0`}
+      key={event.id}
+      className={`${getResponsiveWidth(size)} ${CARD_ASPECT_CLASS} min-w-0 overflow-visible ${extraClass}`}
     >
       <PastEventCard
-        title={event.title}
-        type={event.type as EventType}
-        date={event.date}
-        cover_image_path={event.cover_image_path}
+        {...event}
       />
     </div>
   );
-
   if (row.type === "full" || row.type === "half" || row.type === "thirds") {
     return (
-      <div className="flex flex-col md:flex-row gap-10 w-full min-w-0">
+      <div className={rowClass}>
         {row.cards.map((card) => renderCard(card))}
       </div>
     );
@@ -36,35 +34,32 @@ export function GridRowRenderer({ row }: { row: GridRow }) {
 
   // column: 7th 2/3w, 8th+9th 1/3w column (flipped: column on left)
   const [card7, card8, card9] = row.cards;
-  const colClass = "flex flex-col gap-[26.67px] min-w-0"; // matches card 7 height (2:3 aspect)
+  const colCardHover = "md:mb-0 md:[&:has(:hover)]:mb-7 md:transition-[margin] md:duration-200 md:delay-80";
   const colCards = (
     <>
-      {card8 && renderCard(card8)}
-      {card9 && renderCard(card9)}
+      {card8 && renderCard({ ...card8, size: "full", extraClass: colCardHover })}
+      {card9 && renderCard({ ...card9, size: "full", extraClass: colCardHover })}
     </>
   );
   const bigCard = card7 && renderCard(card7);
 
-  const colWidth = "w-[calc(33.333333%-26.667px)]"; // same as gridRowThirds
-  const bigWidth = "w-[calc(66.666667%-13.333px)]"; // fills rest (100% - gap - colWidth)
-
   return (
-    <div className="flex flex-col md:flex-row gap-10 w-full min-w-0">
+    <div className={rowClass}>
       {row.flipped ? (
         <>
-          <div className={`${getResponsiveWidth(colWidth)} ${colClass}`}>
+          <div className={`${getResponsiveWidth("third")} ${colClass}`}>
             {colCards}
           </div>
-          <div className={`${getResponsiveWidth(bigWidth)} min-w-0`}>
+          <div className={`${getResponsiveWidth("twoThird")} min-w-0`}>
             {bigCard}
           </div>
         </>
       ) : (
         <>
-          <div className={`${getResponsiveWidth(bigWidth)} min-w-0`}>
+          <div className={`${getResponsiveWidth("twoThird")} min-w-0`}>
             {bigCard}
           </div>
-          <div className={`${getResponsiveWidth(colWidth)} ${colClass}`}>
+          <div className={`${getResponsiveWidth("third")} ${colClass}`}>
             {colCards}
           </div>
         </>

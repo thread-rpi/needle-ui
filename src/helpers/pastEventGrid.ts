@@ -1,14 +1,18 @@
 import type { PastEvent } from "../types/eventTypes";
 
+export type CardSize = "full" | "half" | "third" | "twoThird";
+
 export type GridEvent = {
   event: PastEvent;
   index: number;
-  // aspect-[3/2] for 2:3 height:width ratio
-  width: string;
-  height: string;
+  size: CardSize;
 };
 
-/** Row types for desktop pattern (gap-10 = 40px) */
+// card extends 1.75rem below base on hover - grid reserves this space
+export const CARD_EXTENSION = "1.75rem";
+export const CARD_ASPECT_CLASS = "aspect-[3/2]";
+
+// row types for desktop pattern (gap-10 = 40px)
 export type GridRowFull = { type: "full"; cards: GridEvent[] };
 export type GridRowHalf = { type: "half"; cards: GridEvent[] };
 export type GridRowThirds = { type: "thirds"; cards: GridEvent[] };
@@ -23,17 +27,48 @@ export type GridRow =
   | GridRowThirds
   | GridRowColumn;
 
+const SIZE_CLASS_MAP: Record<CardSize, string> = {
+  full: "w-full md:w-full",
+  half: "w-full md:flex-[0_0_calc(50%-20px)] md:w-auto",
+  third: "w-full md:flex-[0_0_calc(33.333333%-26.667px)] md:w-auto",
+  twoThird: "w-full md:flex-[0_0_calc(66.666667%-13.333px)] md:w-auto",
+};
+
 /*
- Desktop pattern (all cards 2:3 aspect ratio):
- - Card 1 only: Full width
- - Cards 2-9, 10-17, ...: Repeat 2-9 pattern
+ (desktop) pattern: base 2:3 aspect, cards extend 1.75rem on hover
+ - card 1: full width
+ - cards 2-9, cards 10-17, ...: repeat 2-9 pattern
    - 2-3: 1/2w each (same row)
    - 4-5-6: 1/3w each (same row)
    - 7-8-9: 7th 2/3w, 8th+9th 1/3w column (flipped alternating)
  */
 export const generatePastEventGrid = (content: PastEvent[]): GridRow[] => {
   const rows: GridRow[] = [];
-  const aspectRatio = "aspect-[3/2]";
+  const createCard = (event: PastEvent, index: number, size: CardSize): GridEvent => ({
+    event,
+    index,
+    size,
+  });
+
+  const appendOrCreate = (
+    type: "half" | "thirds" | "column",
+    maxCards: number,
+    card: GridEvent,
+    flipped?: boolean
+  ) => {
+    const lastRow = rows[rows.length - 1];
+    if (lastRow?.type === type && lastRow.cards.length < maxCards) {
+      lastRow.cards.push(card);
+      return;
+    }
+
+    if (type === "column") {
+      rows.push({ type, cards: [card], flipped: Boolean(flipped) });
+      return;
+    }
+
+    rows.push({ type, cards: [card] });
+  };
 
   for (let i = 0; i < content.length; i++) {
     const item = content[i];
@@ -46,102 +81,25 @@ export const generatePastEventGrid = (content: PastEvent[]): GridRow[] => {
     if (cardIndex === 1) {
       rows.push({
         type: "full",
-        cards: [
-          {
-            event: item,
-            index: i,
-            width: "w-full",
-            height: aspectRatio,
-          },
-        ],
+        cards: [createCard(item, i, "full")],
       });
     } else if (cyclePosition === 2 || cyclePosition === 3) {
-      const width = "w-[calc(50%-20px)]"; // 1/2w minus half of gap
-      const lastRow = rows[rows.length - 1];
-      if (lastRow?.type === "half" && lastRow.cards.length < 2) {
-        lastRow.cards.push({ event: item, index: i, width, height: aspectRatio });
-      } else {
-        rows.push({
-          type: "half",
-          cards: [{ event: item, index: i, width, height: aspectRatio }],
-        });
-      }
+      appendOrCreate("half", 2, createCard(item, i, "half"));
     } else if (cyclePosition === 4 || cyclePosition === 5 || cyclePosition === 6) {
-      const width = "w-[calc(33.333333%-26.667px)]"; // 1/3w
-      const lastRow = rows[rows.length - 1];
-      if (lastRow?.type === "thirds" && lastRow.cards.length < 3) {
-        lastRow.cards.push({ event: item, index: i, width, height: aspectRatio });
-      } else {
-        rows.push({
-          type: "thirds",
-          cards: [{ event: item, index: i, width, height: aspectRatio }],
-        });
-      }
+      appendOrCreate("thirds", 3, createCard(item, i, "third"));
     } else {
-      // 7, 8, 9
-      const width =
-        cyclePosition === 7
-          ? "w-[calc(66.666667%-13.333px)]" // 2/3w (fills rest when column is thirds-width)
-          : "w-[calc(33.333333%-26.667px)]"; // 1/3w (same as gridRowThirds)
-      const lastRow = rows[rows.length - 1];
-      if (
-        lastRow?.type === "column" &&
-        lastRow.cards.length < 3
-      ) {
-        lastRow.cards.push({
-          event: item,
-          index: i,
-          width,
-          height: aspectRatio,
-        });
-      } else {
-        rows.push({
-          type: "column",
-          cards: [
-            {
-              event: item,
-              index: i,
-              width,
-              height: aspectRatio,
-            },
-          ],
-          flipped,
-        });
-      }
+      const size = cyclePosition === 7 ? "twoThird" : "third";
+      appendOrCreate("column", 3, createCard(item, i, size), flipped);
     }
   }
   return rows;
 };
 
 /**
- * Converts width classes to responsive versions for mobile and desktop.
- * For fractional widths, uses flex-basis instead of width for better control in flexbox layouts.
- */
-export const getResponsiveWidth = (width: string): string => {
-  if (width.includes("50%")) {
-    // 2-card rows (1/2): calc(50%-20px)
-    return "w-full md:flex-[0_0_calc(50%-20px)] md:w-auto";
-  }
-  if (width.includes("33.333") && width.includes("26.667")) {
-    // 3-card rows: calc(33.333333%-26.667px)
-    return "w-full md:flex-[0_0_calc(33.333333%-26.667px)] md:w-auto";
-  }
-  if (width.includes("33.333") && width.includes("13.333")) {
-    // 2/3+1/3 rows (1/3): calc(33.333333%-13.333px)
-    return "w-full md:flex-[0_0_calc(33.333333%-13.333px)] md:w-auto";
-  }
-  if (width.includes("66.667") && width.includes("13.333")) {
-    // column layout (2/3): calc(66.666667%-13.333px)
-    return "w-full md:flex-[0_0_calc(66.666667%-13.333px)] md:w-auto";
-  }
-  if (width.includes("66.667")) {
-    return "w-full md:flex-[0_0_calc(66.666667%-26.667px)] md:w-auto";
-  }
-  if (width.startsWith("w-[")) {
-    const value = width.substring(2);
-    return `w-full md:w-${value}`;
-  }
-  const mdWidth = width.replace("w-", "md:w-");
-  return `w-full ${mdWidth}`;
+ converts width classes to responsive versions for mobile and desktop
+ for fractional widths, uses flex-basis instead of width for better control in flexbox layout
+*/
+export const getResponsiveWidth = (size: CardSize): string => {
+  return SIZE_CLASS_MAP[size];
 };
 
