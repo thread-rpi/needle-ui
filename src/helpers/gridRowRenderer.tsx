@@ -1,4 +1,4 @@
-import type { EventType, PastEvent } from "../types/eventTypes";
+import type { PastEvent } from "../types/eventTypes";
 import { PastEventCard } from "../components/PastEventCard";
 import { CARD_ASPECT_CLASS, getResponsiveWidth, type CardSize, type GridRow } from "./pastEventGrid";
 
