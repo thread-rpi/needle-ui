@@ -21,7 +21,7 @@ const cardStyleBySize: Record<
 > = {
   full: {
     maskClass:
-      "[mask-image:linear-gradient(to_bottom,transparent_0%_60%,black_98%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%_60%,black_98%)]",
+      "[mask-image:linear-gradient(to_bottom,transparent_0%_60%,black_96%)] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%_60%,black_96%)]",
     contentPadClass: "px-8 pb-5 md:px-14",
     iconClass: "text-4xl md:text-[36px]",
     titleClass: "text-lg md:text-2xl",
@@ -73,17 +73,17 @@ export const PastEventCard = ({
   const cardStyle = cardStyleBySize[cardSize];
   return (
     <div
-      className={`relative w-full bg-black rounded-4xl overflow-hidden 
+      className={`relative w-full bg-black rounded-4xl shadow-lg shadow-black/35 overflow-hidden 
       transition-all ease-in-out ${showHovered ? `h-[calc(100%+2.25rem)] duration-200 delay-80` : `h-full duration-300 delay-0`}
-      ${isPlaceholder ? "blur-sm opacity-80 pointer-events-none" : ""} `}
+      ${isPlaceholder ? "blur-sm pointer-events-none scale-98" : ""} `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="absolute inset-0">
+      <div className={`absolute inset-0 ${isPlaceholder ? "bg-white" : ""}`}>
         <img
           src={coverImageUrl}
           alt={title}
-          className={`absolute inset-0 w-full h-full object-cover ${isPlaceholder ? "scale-102" : ""}`}
+          className={`absolute inset-0 w-full h-full object-cover ${isPlaceholder ? " opacity-70" : ""}`}
         />
       </div>
       <div

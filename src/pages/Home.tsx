@@ -1,12 +1,10 @@
-import { useState } from "react";
-import RecentEventsPopup from "../components/RecentEventsPopup";
-import LoopTap from "../assets/LoopTap.svg";
 import { useViewport } from "../contexts/useViewport";
 import { generatePastEventGrid } from "../helpers/pastEventGrid";
 import { GridRowRenderer } from "../helpers/gridRowRenderer";
 import { useGetPastEvents } from "../api/queries";
 import { MobilePastEventCard } from "../components/MobilePastEventCard";
 import type { PastEvent } from "../types/eventTypes";
+import { RecentContentThread } from "../components/RecentContentThread";
 
 const MIN_PAST_EVENTS = 6;
 
@@ -22,8 +20,6 @@ const createPlaceholderEvents = (count: number, fallbackCoverPath?: string): Pas
 
 const Home = () => {
   const { isMobile } = useViewport();
-  const [recentEventsPopupOpen, setRecentEventsPopupOpen] = useState(false);
-  const handleClick = () => setRecentEventsPopupOpen(!recentEventsPopupOpen);
 
   const { 
     isSuccess: isRecentContentSuccess,
@@ -39,21 +35,21 @@ const Home = () => {
     pastEvents.length >= MIN_PAST_EVENTS
       ? pastEvents
       : [...pastEvents, ...createPlaceholderEvents(MIN_PAST_EVENTS - pastEvents.length, fallbackCoverPath)];
-  const pastEventRows = generatePastEventGrid(displayPastEvents);
+  const pastEventRows = generatePastEventGrid(Array(17).fill(displayPastEvents).flat()); 
   
   return (
     <div className="relative w-full h-max min-h-dvh flex justify-center">
       {isRecentContentSuccess && (
         <>
         {isMobile && (
-          <div className="flex flex-col gap-5 w-full max-w-7xl h-max mx-auto px-8 pb-6">
+          <div className="z-10 flex flex-col gap-5 w-full max-w-7xl h-max mx-auto px-6 pb-6">
             {displayPastEvents.map((event) => (
               <MobilePastEventCard key={event.id} {...event} />
             ))}
           </div>
         )}
         {!isMobile && (
-          <div className="flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-12 pb-6">
+          <div className="z-10 flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-12 pb-6">
             {pastEventRows.map((row, rowIndex) => (
               <GridRowRenderer key={rowIndex} row={row} />
             ))}
@@ -72,22 +68,11 @@ const Home = () => {
         <div className="w-full h-min text-center text-black text-[2rem]">Please try again later.</div>
       </div>
       )}
-     {!isMobile && ( <button
-        onClick={handleClick}
-        className="absolute cursor-pointer z-10"
-        style={{
-          right: '0%',
-          top: '73.4%',
-          height: '23.22vh',
-          width: 'auto',
-        }}
-      >
-        <img src={LoopTap} alt="The Loop" className="w-auto h-full" />
-      </button>
-      )}
-      {!isMobile && ( 
-      <RecentEventsPopup isOpen={recentEventsPopupOpen} />
-      )}
+      <div className="absolute inset-0 w-full h-[calc(100%+10rem)] lg:h-[calc(100%+1rem)] -mt-10 md:-mt-12 lg:mt-12 overflow-clip pointer-events-none">
+        <RecentContentThread 
+          className="z-0 w-[240vw] lg:w-[127vw] 2xl:w-[129vw] max-w-none absolute top-0 left-1/2 -translate-x-1/2 h-auto"
+        />
+      </div>
     </div>
   );
 };

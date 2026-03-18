@@ -12,7 +12,7 @@ export const RecentContentThread = ({ className }: RecentContentThreadProps) => 
       viewBox="0 0 1799 3561"
       fill="none"
       className={className}
-      preserveAspectRatio="xMidYMid meet"
+      // preserveAspectRatio="xMidYMid meet"
     >
       <path
         d={THREAD_PATH}
