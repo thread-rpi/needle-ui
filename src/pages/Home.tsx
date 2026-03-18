@@ -35,7 +35,7 @@ const Home = () => {
     pastEvents.length >= MIN_PAST_EVENTS
       ? pastEvents
       : [...pastEvents, ...createPlaceholderEvents(MIN_PAST_EVENTS - pastEvents.length, fallbackCoverPath)];
-  const pastEventRows = generatePastEventGrid(Array(17).fill(displayPastEvents).flat()); 
+  const pastEventRows = generatePastEventGrid(displayPastEvents); 
   
   return (
     <div className="relative w-full h-max min-h-dvh flex justify-center">
