@@ -5,6 +5,20 @@ import { useViewport } from "../contexts/useViewport";
 import { generatePastEventGrid } from "../helpers/pastEventGrid";
 import { GridRowRenderer } from "../helpers/gridRowRenderer";
 import { useGetPastEvents } from "../api/queries";
+import { MobilePastEventCard } from "../components/MobilePastEventCard";
+import type { PastEvent } from "../types/eventTypes";
+
+const MIN_PAST_EVENTS = 6;
+
+const createPlaceholderEvents = (count: number, fallbackCoverPath?: string): PastEvent[] =>
+  Array.from({ length: count }, (_, index) => ({
+    id: `placeholder-${index + 1}`,
+    title: "Soon...",
+    date: new Date("9999-12-31").toISOString(),
+    location: "???",
+    type: "internal",
+    cover_image_path: fallbackCoverPath ?? "",
+  }));
 
 const Home = () => {
   const { isMobile } = useViewport();
@@ -20,16 +34,32 @@ const Home = () => {
   } = useGetPastEvents();
   console.log(recentContentData?.past_events || recentContentError?.error);
   const pastEvents = recentContentData?.past_events || [];
-  const pastEventRows = generatePastEventGrid(Array(17).fill(pastEvents).flat());
+  const fallbackCoverPath = pastEvents[0]?.cover_image_path;
+  const displayPastEvents =
+    pastEvents.length >= MIN_PAST_EVENTS
+      ? pastEvents
+      : [...pastEvents, ...createPlaceholderEvents(MIN_PAST_EVENTS - pastEvents.length, fallbackCoverPath)];
+  const pastEventRows = generatePastEventGrid(displayPastEvents);
   
   return (
     <div className="relative w-full h-max min-h-dvh flex justify-center">
       {isRecentContentSuccess && (
-        <div className="flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-8 lg:px-12 pb-6">
-          {pastEventRows.map((row, rowIndex) => (
-            <GridRowRenderer key={rowIndex} row={row} />
-          ))}
-        </div>
+        <>
+        {isMobile && (
+          <div className="flex flex-col gap-5 w-full max-w-7xl h-max mx-auto px-8 pb-6">
+            {displayPastEvents.map((event) => (
+              <MobilePastEventCard key={event.id} {...event} />
+            ))}
+          </div>
+        )}
+        {!isMobile && (
+          <div className="flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-12 pb-6">
+            {pastEventRows.map((row, rowIndex) => (
+              <GridRowRenderer key={rowIndex} row={row} />
+            ))}
+          </div>
+        )}
+        </>
       )}
       {isRecentContentLoading && (
         <div className="flex max-w-7xl w-full h-full items-center justify-center">

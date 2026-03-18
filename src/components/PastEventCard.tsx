@@ -57,6 +57,7 @@ interface PastEventCardProps extends PastEvent {
 };
 
 export const PastEventCard = ({
+  id,
   title,
   type,
   date,
@@ -67,12 +68,14 @@ export const PastEventCard = ({
   const { isMobile } = useViewport();
   const [isHovered, setIsHovered] = useState(false);
   const showHovered = isMobile ? true : isHovered;
+  const isPlaceholder = id.startsWith("placeholder-");
   const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + cover_image_path;
   const cardStyle = cardStyleBySize[cardSize];
   return (
     <div
       className={`relative w-full bg-black rounded-4xl overflow-hidden 
-      transition-all ease-in-out ${showHovered ? `h-[calc(100%+2.25rem)] duration-200 delay-80` : `h-full duration-300 delay-0`} `}
+      transition-all ease-in-out ${showHovered ? `h-[calc(100%+2.25rem)] duration-200 delay-80` : `h-full duration-300 delay-0`}
+      ${isPlaceholder ? "blur-sm opacity-80 pointer-events-none" : ""} `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -80,7 +83,7 @@ export const PastEventCard = ({
         <img
           src={coverImageUrl}
           alt={title}
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover ${isPlaceholder ? "scale-102" : ""}`}
         />
       </div>
       <div
@@ -107,6 +110,10 @@ export const PastEventCard = ({
           </div>
         </div>
       </div>
+
+      {isPlaceholder && (
+        <div className="z-10 absolute inset-0 text-white text-[10rem] font-bold flex items-center justify-center">?</div>
+      )}
     </div>
   );
 }
