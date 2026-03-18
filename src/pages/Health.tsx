@@ -3,21 +3,19 @@ import { useGetHealth } from '../api/queries'
 const Health = () => {
   // Health endpoint destructuring
   const { isSuccess, data, isError, error, isLoading }= useGetHealth();
-
+  console.log(error);
   return (
-    <div className={`h-full w-full flex items-center justify-center bg-black ${
-          isSuccess ? 'bg-green-500'
-          : isLoading ? 'bg-yellow-500'
-          : 'bg-red-500'
-        }`}>
-      <div className='h-max w-max'>
-        <div className={`text-[64px] text-white font-bold`}>
-          {(isLoading && 'loading...') || 
-          ('API is ' + ((isSuccess && data.data + '! :D') || isError && 'unhealthy! :C'))
+    <div className={`relative w-full h-full flex items-center justify-center`}>
+      <div className='z-10 h-max w-max'>
+        <div className={`text-[32px] md:text-[64px] text-black font-bold text-wrap`}>
+          {
+          (isLoading && <>API is <a className='text-yellow-500'>loading...</a></>) || 
+          (isSuccess && <>API is <a className='text-green-500'>{data?.state}!</a> :D</>) ||
+          (isError && <>API is <a className='text-red-500'>unhealthy!</a> :C</>)
           }
         </div>
-        <div className='text-[24px] text-gray-300'>
-          {isSuccess && 'No issues to report.' || isError && error.error}
+        <div className='text-[16px] md:text-[24px] text-gray-400'>
+          {isSuccess && ('No issues to report.') || isError && ('Error: ' + (error?.error || 'Unknown error occurred'))}
         </div>
       </div>
     </div>

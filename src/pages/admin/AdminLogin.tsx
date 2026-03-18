@@ -110,24 +110,24 @@ const AdminLogin = () => {
           className="flex flex-col items-center gap-3 w-full"
         >
           {/* email */}
-          <div className="relative w-full h-[60px] flex items-center px-[17px]">
-            <div className="absolute inset-0 bg-white rounded-[15px] shadow-[inset_0px_3px_6px_#0000004c]"/>
+          <div className="relative w-full h-14 flex items-center px-[17px]">
+            <div className="absolute inset-0 bg-thread-off-white border-b-1 border-black"/>
             <input
               type="email"
               placeholder="email"
-              className="relative z-10 w-full h-[44px] bg-transparent font-bold text-lg text-thread-red placeholder:text-thread-red focus:placeholder-transparent outline-none"
+              className="relative z-10 w-full h-full bg-transparent font-bold text-lg text-thread-red placeholder:text-thread-red focus:placeholder-transparent outline-none"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           {/* password */}
-          <div className="relative w-full h-[60px] flex items-center px-[17px]">
-            <div className="absolute inset-0 bg-white rounded-[15px] shadow-[inset_0px_3px_6px_#0000004c]"/>
+          <div className="relative w-full h-14 flex items-center px-[17px]">
+            <div className="absolute inset-0 bg-thread-off-white border-b-1 border-black"/>
             <input
               type="password"
               placeholder="password"
-              className="relative z-10 w-full h-[44px] bg-transparent font-bold text-lg text-thread-red placeholder:text-thread-red focus:placeholder-transparent outline-none"
+              className="relative z-10 w-full h-full bg-transparent font-bold text-lg text-thread-red placeholder:text-thread-red focus:placeholder-transparent outline-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -138,9 +138,9 @@ const AdminLogin = () => {
             type="submit"
             form="login-form"
             disabled={isLoginPending}
-            className="mt-2 flex w-auto h-auto items-center justify-center py-3 px-8 bg-thread-red rounded-full hover:bg-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-2 flex w-auto h-auto items-center justify-center py-3 px-8 border-1 text-thread-red border-black hover:bg-thread-red hover:text-white transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className="font-bold text-white text-lg">{isLoginPending ? "logging in..." : "enter"}</div>
+            <div className="font-bold  text-lg">{isLoginPending ? "logging in..." : "enter"}</div>
           </button>
         </form>
       </div>

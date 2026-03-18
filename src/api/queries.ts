@@ -2,8 +2,8 @@ import { useMutation, useQuery, type UseMutationResult, type UseQueryResult } fr
 import { apiGet, apiPost } from "./api";
 import { API_ROUTES } from "./apiRoutes";
 import type { 
-  HealthError, 
-  HealthResponse, 
+  HealthResponse,
+  HealthError,
   LoginResponse, 
   LoginError, 
   LoginRequest,
@@ -14,6 +14,8 @@ import type {
   AdminUserError,
   EventOverviewResponse,
   EventOverviewError,
+  PastEventsResponse,
+  PastEventsError,
 } from "../types/queryTypes";
 
 
@@ -87,3 +89,16 @@ export const useCurrentAdminUser = (enabled: boolean = true): UseQueryResult<Adm
     enabled: enabled
   });
 };
+
+// past events endpoint request - using mock data (API call commented out)
+async function getPastEvents(): Promise<PastEventsResponse> {
+  return apiGet<PastEventsResponse, PastEventsError>({ endpoint: API_ROUTES.pastEvents });
+}
+
+// past events endpoint hook 
+export const useGetPastEvents = (): UseQueryResult<PastEventsResponse, PastEventsError> => {
+  return useQuery<PastEventsResponse, PastEventsError>({
+    queryKey: ["pastEvents"],
+    queryFn: () => getPastEvents()
+  });
+}
