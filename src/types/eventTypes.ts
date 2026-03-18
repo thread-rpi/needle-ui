@@ -64,3 +64,5 @@ export type PastEvent = {
   type: EventType;
   cover_image_path: string;
 };
+
+export type PastEventCardSize = "full" | "half" | "third" | "twoThird";

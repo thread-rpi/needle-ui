@@ -1,15 +1,13 @@
-import type { PastEvent } from "../types/eventTypes";
-
-export type CardSize = "full" | "half" | "third" | "twoThird";
+import type { PastEvent, PastEventCardSize } from "../types/eventTypes";
 
 export type GridEvent = {
   event: PastEvent;
   index: number;
-  size: CardSize;
+  size: PastEventCardSize;
 };
 
 // card extends 1.75rem below base on hover - grid reserves this space
-export const CARD_EXTENSION = "1.75rem";
+export const CARD_EXTENSION = "2.25rem";
 export const CARD_ASPECT_CLASS = "aspect-[3/2]";
 
 // row types for desktop pattern (gap-10 = 40px)
@@ -27,7 +25,7 @@ export type GridRow =
   | GridRowThirds
   | GridRowColumn;
 
-const SIZE_CLASS_MAP: Record<CardSize, string> = {
+const SIZE_CLASS_MAP: Record<PastEventCardSize, string> = {
   full: "w-full md:w-full",
   half: "w-full md:flex-[0_0_calc(50%-20px)] md:w-auto",
   third: "w-full md:flex-[0_0_calc(33.333333%-26.667px)] md:w-auto",
@@ -44,7 +42,7 @@ const SIZE_CLASS_MAP: Record<CardSize, string> = {
  */
 export const generatePastEventGrid = (content: PastEvent[]): GridRow[] => {
   const rows: GridRow[] = [];
-  const createCard = (event: PastEvent, index: number, size: CardSize): GridEvent => ({
+  const createCard = (event: PastEvent, index: number, size: PastEventCardSize): GridEvent => ({
     event,
     index,
     size,
@@ -99,7 +97,7 @@ export const generatePastEventGrid = (content: PastEvent[]): GridRow[] => {
  converts width classes to responsive versions for mobile and desktop
  for fractional widths, uses flex-basis instead of width for better control in flexbox layout
 */
-export const getResponsiveWidth = (size: CardSize): string => {
+export const getResponsiveWidth = (size: PastEventCardSize): string => {
   return SIZE_CLASS_MAP[size];
 };
 
