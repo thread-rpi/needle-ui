@@ -19,7 +19,7 @@ export const MobilePastEventCard = ({
   const isPlaceholder = id.startsWith("placeholder-");
   const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + cover_image_path;
   return (
-    <div className={`relative w-full aspect-[3/2] bg-black rounded-2xl overflow-hidden ${isPlaceholder ? "blur-xs opacity-80 pointer-events-none" : ""}`}>
+    <div className={`relative w-full aspect-[3/2] bg-black rounded-2xl overflow-hidden ${isPlaceholder ? "blur-sm opacity-80 pointer-events-none" : ""}`}>
       <div className="absolute inset-0">
         <img
           src={coverImageUrl}
@@ -50,6 +50,10 @@ export const MobilePastEventCard = ({
           </div>
         </div>
       </div>
+
+      {isPlaceholder && (
+        <div className="z-10 absolute inset-0 text-white text-[8rem] sm:text-[15rem] font-bold flex items-center justify-center">?</div>
+      )}
     </div>
   );
 }
