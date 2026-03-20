@@ -5,12 +5,13 @@ import Loader from "../components/Loader";
 import { routes } from "./routePaths";
 import Layout from "../pages/Layout";
 import ProtectedRoute from "../components/ProtectedRoute";
+import UnfinishedPage from "../pages/UnfinishedPage";
 
 const Home = lazy(() => import("../pages/Home"));
-const About = lazy(() => import("../pages/About"));
-const Features = lazy(() => import("../pages/Features"));
-const Publications = lazy(() => import("../pages/Publications"));
-const Calendar = lazy(() => import("../pages/Calendar"));
+// const About = lazy(() => import("../pages/About"));
+// const Features = lazy(() => import("../pages/Features"));
+// const Publications = lazy(() => import("../pages/Publications"));
+// const Calendar = lazy(() => import("../pages/Calendar"));
 const Health = lazy(() => import("../pages/Health"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const AdminLogin = lazy(() => import("../pages/admin/AdminLogin"));
@@ -43,10 +44,10 @@ export default function RouteController() {
         {/* visitor routes */}
         <Route path={routes.root} element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path={routes.about} element={<About />} />
-          <Route path={routes.features} element={<Features />} />
-          <Route path={routes.publications} element={<Publications />} />
-          <Route path={routes.calendar} element={<Calendar />} />
+          <Route path={routes.about} element={<UnfinishedPage />} />
+          <Route path={routes.features} element={<UnfinishedPage />} />
+          <Route path={routes.publications} element={<UnfinishedPage />} />
+          <Route path={routes.calendar} element={<UnfinishedPage />} />
           <Route path={routes.health} element={<Health />} />
 
           {/* catch-all 404 route */}
