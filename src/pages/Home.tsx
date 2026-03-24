@@ -68,9 +68,9 @@ const Home = () => {
         <div className="w-full h-min text-center text-black text-[2rem]">Please try again later.</div>
       </div>
       )}
-      <div className="absolute inset-0 w-full h-[calc(100%+10rem)] lg:h-[calc(100%+1rem)] -mt-10 md:-mt-12 lg:mt-12 overflow-clip pointer-events-none">
+      <div className="absolute inset-0 w-full h-[calc(100%+9rem)] md:h-[calc(100%+12rem)] lg:h-[calc(100%+8rem)] xl:h-[calc(100%+12rem)] -mt-10 lg:mt-12 overflow-clip pointer-events-none">
         <RecentContentThread 
-          className="z-0 w-[240vw] lg:w-[127vw] 2xl:w-[129vw] max-w-none absolute top-0 left-1/2 -translate-x-1/2 h-auto"
+          className="z-0 w-[280vw] md:w-[220vw] lg:w-[127vw] 2xl:w-[129vw] max-w-none absolute top-0 left-1/2 -translate-x-1/2 h-auto"
         />
       </div>
     </div>
