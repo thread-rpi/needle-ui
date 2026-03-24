@@ -5,19 +5,21 @@ import MobileHeader from "../components/MobileHeader";
 import Loader from "../components/Loader";
 import { useViewport } from "../contexts/useViewport";
 import '../index.css'
+import Footer from "../components/Footer";
 
 export default function Layout() {
   const { isMobile } = useViewport();
   const header = isMobile ? <MobileHeader /> : <Header />;
 
   return (
-    <div className='w-full min-h-dvh flex bg-white'>
-        {header}
-        <main className={`flex-1 ${isMobile ? 'my-24' : 'my-15'}`}>
-          <Suspense fallback={<Loader />}>
-            <Outlet />
-          </Suspense>
-        </main>
-      </div>
+    <div className="w-full min-h-dvh flex flex-col bg-white pb-5">
+      {header}
+      <main className={`flex-1 ${isMobile ? "mt-24" : "mt-15"}`}>
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
+      </main>
+      <Footer />
+    </div>
   );
 }
