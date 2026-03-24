@@ -26,6 +26,6 @@ export const adminHeaderRoutes = [
 
 export const footerLinks = [
   {label: "Instagram", href: "https://www.instagram.com/rpithread/", icon: "mdi:instagram", offset: "61%" },
-  {label: "Discord", href: "https://discord.gg/X22djk9rSH", icon: "mdi:mingcute:discord-fill", offset: "71.75%" },
+  {label: "Discord", href: "https://discord.gg/X22djk9rSH", icon: "mingcute:discord-fill", offset: "71.75%" },
   {label: "Email", href: "mailto:thomam13@rpi.edu?subject=The%20Thread%20-%20Site%20Inquiry", icon: "line-md:email", offset: "81.5%" },
 ];

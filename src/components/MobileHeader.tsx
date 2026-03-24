@@ -77,7 +77,7 @@ export default function MobileHeader() {
       </header>
 
       {/* dropdown menu */}
-      <div className={`fixed top-0 left-0 pb-20 px-10 w-full h-full bg-white z-190 flex flex-col items-start justify-end transition-all duration-300 ease-in-out mix-blend-normal ${
+      <div className={`fixed top-0 left-0 px-10 w-full h-full bg-white z-190 flex flex-col items-start justify-end transition-all duration-300 ease-in-out mix-blend-normal ${
         hamburgerMenuOpen ? 'translate-y-0 opacity-100' : 'opacity-0 pointer-events-none duration-500 ease-in-out'}`}>
         <nav className="flex flex-col z-25">
           <button
