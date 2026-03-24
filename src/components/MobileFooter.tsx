@@ -8,14 +8,14 @@ export default function MobileFooter() {
         <span className="text-xs sm:text-lg font-bold whitespace-nowrap">
           &copy; The Thread {new Date().getFullYear()}
         </span>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5">
           {footerLinks.map((item) => (
             <a
               key={item.label}
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-2xl sm:text-3xl"
+              className="text-[26px] sm:text-3xl"
             >
               {/* {item.label} */}
               <Icon icon={item.icon} inline={true} />
