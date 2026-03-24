@@ -5,7 +5,6 @@ import { useGetPastEvents } from "../api/queries";
 import { MobilePastEventCard } from "../components/MobilePastEventCard";
 import type { PastEvent } from "../types/eventTypes";
 import { RecentContentThread } from "../components/RecentContentThread";
-import Loader from "../components/Loader";
 
 const MIN_PAST_EVENTS = 6;
 
@@ -56,15 +55,16 @@ const Home = () => {
             ))}
           </div>
         )}
-        <div className="absolute inset-0 w-full h-[calc(100%+9rem)] md:h-[calc(100%+12rem)] lg:h-[calc(100%+8rem)] xl:h-[calc(100%+12rem)] -mt-10 lg:mt-12 overflow-clip pointer-events-none">
-          <RecentContentThread 
-            className="z-0 w-[280vw] md:w-[220vw] lg:w-[127vw] 2xl:w-[129vw] max-w-none absolute top-0 left-1/2 -translate-x-1/2 h-auto"
-          />
-        </div>
         </>
       )}
       {isRecentContentLoading && (
-        <Loader />
+        <div className="z-10 flex max-w-7xl w-full h-full items-center justify-center">
+          <div
+            className="h-14 w-14 animate-spin rounded-full border-4 border-thread-red/25 border-t-thread-red"
+            role="status"
+            aria-label="Loading"
+          />
+        </div>
       )}
       {isRecentContentError && (
         <div className="w-full flex flex-col items-center justify-center">
@@ -78,6 +78,11 @@ const Home = () => {
           </div>
         </div>
       )}
+      <div className="absolute inset-0 w-full h-[calc(100%+9rem)] md:h-[calc(100%+12rem)] lg:h-[calc(100%+8rem)] xl:h-[calc(100%+12rem)] -mt-10 lg:mt-12 overflow-clip pointer-events-none">
+        <RecentContentThread 
+          className="z-0 w-[280vw] md:w-[220vw] lg:w-[127vw] 2xl:w-[129vw] max-w-none absolute top-0 left-1/2 -translate-x-1/2 h-auto"
+        />
+      </div>
     </div>
   );
 };
