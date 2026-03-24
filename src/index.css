@@ -30,10 +30,19 @@
 
 /* gabarito as base font globally */
 @layer base {
-  /* html {
-    scrollbar-gutter: stable;
-  } */
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  html,
   body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
     font-family: "Gabarito", sans-serif;
   }
 }
