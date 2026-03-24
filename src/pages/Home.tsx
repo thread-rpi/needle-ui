@@ -42,25 +42,25 @@ const Home = () => {
     <div className="relative w-full h-full min-h-[60dvh] flex justify-center">
       {isRecentContentSuccess && (
         <>
-        {isMobile && (
-          <div className="z-10 flex flex-col gap-5 w-full max-w-7xl h-max mx-auto px-6 pb-6">
-            {displayPastEvents.map((event) => (
-              <MobilePastEventCard key={event.id} {...event} />
-            ))}
+          {isMobile && (
+            <div className="z-10 flex flex-col gap-5 w-full max-w-7xl h-max mx-auto px-6 pb-6">
+              {displayPastEvents.map((event) => (
+                <MobilePastEventCard key={event.id} {...event} />
+              ))}
+            </div>
+          )}
+          {!isMobile && (
+            <div className="z-10 flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-12 pb-6">
+              {pastEventRows.map((row, rowIndex) => (
+                <GridRowRenderer key={rowIndex} row={row} />
+              ))}
+            </div>
+          )}
+          <div className="absolute inset-0 w-full h-[calc(100%+9rem)] md:h-[calc(100%+12rem)] lg:h-[calc(100%+8rem)] xl:h-[calc(100%+12rem)] -mt-10 lg:mt-12 overflow-clip pointer-events-none">
+            <RecentContentThread 
+              className="z-0 w-[280vw] md:w-[220vw] lg:w-[127vw] 2xl:w-[129vw] max-w-none absolute top-0 left-1/2 -translate-x-1/2 h-auto"
+            />
           </div>
-        )}
-        {!isMobile && (
-          <div className="z-10 flex flex-col gap-10 w-full max-w-7xl h-max mx-auto px-12 pb-6">
-            {pastEventRows.map((row, rowIndex) => (
-              <GridRowRenderer key={rowIndex} row={row} />
-            ))}
-          </div>
-        )}
-        <div className="absolute inset-0 w-full h-[calc(100%+9rem)] md:h-[calc(100%+12rem)] lg:h-[calc(100%+8rem)] xl:h-[calc(100%+12rem)] -mt-10 lg:mt-12 overflow-clip pointer-events-none">
-          <RecentContentThread 
-            className="z-0 w-[280vw] md:w-[220vw] lg:w-[127vw] 2xl:w-[129vw] max-w-none absolute top-0 left-1/2 -translate-x-1/2 h-auto"
-          />
-        </div>
         </>
       )}
       {isRecentContentLoading && (
@@ -76,6 +76,13 @@ const Home = () => {
               Please try again later.
             </div>
           </div>
+        </div>
+      )}
+      {(isRecentContentSuccess || isRecentContentLoading) && (
+        <div className="absolute inset-0 w-full h-[calc(100%+9rem)] md:h-[calc(100%+12rem)] lg:h-[calc(100%+8rem)] xl:h-[calc(100%+12rem)] -mt-10 lg:mt-12 overflow-clip pointer-events-none">
+          <RecentContentThread 
+            className="z-0 w-[280vw] md:w-[220vw] lg:w-[127vw] 2xl:w-[129vw] max-w-none absolute top-0 left-1/2 -translate-x-1/2 h-auto"
+          />
         </div>
       )}
     </div>
