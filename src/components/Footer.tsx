@@ -1,8 +1,11 @@
 import { footerLinks } from "../routes/routePaths";
+import { useViewport } from "../contexts/useViewport";
 
 export default function Footer() {
+  const { width } = useViewport();
   const multiplier = 1.05;
-  const footerWidth = window.innerWidth * multiplier;
+  const viewportWidth = width || 1440;
+  const footerWidth = viewportWidth * multiplier;
   const footerHeight = (footerWidth * 180) / 1440;
 
   return (

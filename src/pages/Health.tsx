@@ -3,7 +3,7 @@ import { useGetHealth } from '../api/queries'
 const Health = () => {
   // Health endpoint destructuring
   const { isSuccess, data, isError, error, isLoading }= useGetHealth();
-  console.log(error);
+  
   return (
     <div className={`relative w-full h-full min-h-[60dvh] flex items-center justify-center`}>
       <div className='z-10 h-max w-max'>
