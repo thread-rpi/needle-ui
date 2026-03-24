@@ -1,11 +1,6 @@
-
-
-import { useNavigate } from "react-router-dom";
-import { routes, footerLinks } from "../routes/routePaths";
-import { Icon } from "@iconify/react";
+import { footerLinks } from "../routes/routePaths";
 
 export default function Footer() {
-  const navigate = useNavigate();
   const multiplier = 1.05;
   const footerWidth = window.innerWidth * multiplier;
   const footerHeight = (footerWidth * 180) / 1440;
