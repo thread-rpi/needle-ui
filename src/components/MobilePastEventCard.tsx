@@ -1,6 +1,9 @@
 import type { EventType, PastEvent } from "../types/eventTypes";
 import { Icon } from "@iconify/react";
 
+// const PAST_EVENT_IMAGE_COMPRESSION_SUFFIX = "md.avif";
+const MOBILE_PAST_EVENT_IMAGE_COMPRESSION_SUFFIX = "og.jpg";
+
 const iconTypes: Record<EventType, string> = {
   shoot: "mage:camera-fill",
   internal: "material-symbols:event",
@@ -13,11 +16,11 @@ export const MobilePastEventCard = ({
   title,
   type,
   date,
-  cover_image_path,
+  image_path,
   location,
 }: MobilePastEventCardProps) => {
   const isPlaceholder = id.startsWith("placeholder-");
-  const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + cover_image_path;
+  const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + image_path + MOBILE_PAST_EVENT_IMAGE_COMPRESSION_SUFFIX;
   return (
     <div className={`relative w-full aspect-[3/2] bg-black rounded-2xl shadow-md shadow-black/40 overflow-hidden ${isPlaceholder ? "blur-sm pointer-events-none" : ""}`}>
       <div className={`absolute inset-0 ${isPlaceholder ? "bg-white" : ""}`}>

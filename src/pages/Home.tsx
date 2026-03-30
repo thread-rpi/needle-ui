@@ -16,7 +16,7 @@ const createPlaceholderEvents = (count: number, fallbackCoverPath?: string): Pas
     date: new Date("9999-12-31").toISOString(),
     location: "???",
     type: "internal",
-    cover_image_path: fallbackCoverPath ?? "",
+    image_path: fallbackCoverPath ?? "",
   }));
 
 const Home = () => {
@@ -31,11 +31,11 @@ const Home = () => {
   } = useGetPastEvents();
   console.log(recentContentData?.past_events || recentContentError?.error);
   const pastEvents = recentContentData?.past_events || [];
-  const fallbackCoverPath = pastEvents[0]?.cover_image_path;
+  const fallbackImagePath = pastEvents[0]?.image_path;
   const displayPastEvents =
     pastEvents.length >= MIN_PAST_EVENTS
       ? pastEvents
-      : [...pastEvents, ...createPlaceholderEvents(MIN_PAST_EVENTS - pastEvents.length, fallbackCoverPath)];
+      : [...pastEvents, ...createPlaceholderEvents(MIN_PAST_EVENTS - pastEvents.length, fallbackImagePath)];
   const pastEventRows = generatePastEventGrid(displayPastEvents); 
   
   return (

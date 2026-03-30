@@ -3,6 +3,9 @@ import type { EventType, PastEvent, PastEventCardSize } from "../types/eventType
 import { Icon } from "@iconify/react";
 import { useViewport } from "../contexts/useViewport";
 
+// const PAST_EVENT_IMAGE_COMPRESSION_SUFFIX = "lg.avif";
+const PAST_EVENT_IMAGE_COMPRESSION_SUFFIX = "og.jpg";
+
 const iconTypes: Record<EventType, string> = {
   shoot: "mage:camera-fill",
   internal: "material-symbols:event",
@@ -61,7 +64,7 @@ export const PastEventCard = ({
   title,
   type,
   date,
-  cover_image_path,
+  image_path,
   location,
   cardSize = "full",
 }: PastEventCardProps) => {
@@ -69,7 +72,7 @@ export const PastEventCard = ({
   const [isHovered, setIsHovered] = useState(false);
   const showHovered = isMobile ? true : isHovered;
   const isPlaceholder = id.startsWith("placeholder-");
-  const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + cover_image_path;
+  const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + image_path + PAST_EVENT_IMAGE_COMPRESSION_SUFFIX;
   const cardStyle = cardStyleBySize[cardSize];
   return (
     <div
