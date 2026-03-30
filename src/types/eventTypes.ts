@@ -22,16 +22,20 @@ export type Event = {
   date: string;
   title: string;
   type: EventType;
-  cover_image_path: string;
   blurb: string;
   published: boolean;
-  image_ids: string[];
   created_at: string;
   updated_at: string;
-  photographer_ids: string[];
-  creative_director_ids: string[];
-  model_ids: string[];
-  additional_personnel: AdditionalPersonnel[];
+  created_by: string;
+  updated_by: string;
+  image_path?: string;
+  image_ids?: string[];
+  photographer_ids?: string[];
+  creative_director_ids?: string[];
+  model_ids?: string[];
+  additional_personnel?: AdditionalPersonnel[];
+  deleted_at?: string;
+  deleted_by?: string;
 };
 
 /** Image document from images collection (imageDB) */
@@ -62,7 +66,7 @@ export type PastEvent = {
   date: string;
   location: string;
   type: EventType;
-  cover_image_path: string;
+  image_path: string;
 };
 
 export type PastEventCardSize = "full" | "half" | "third" | "twoThird";
