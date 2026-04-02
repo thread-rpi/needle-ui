@@ -4,11 +4,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useLogin, useCurrentAdminUser } from "../../api/queries";
 import { useAuth } from "../../contexts/useAuth";
 import { routes } from "../../routes/routePaths";
+import { toast } from "sonner";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const { setUser } = useAuth();
@@ -33,17 +33,14 @@ const AdminLogin = () => {
   };
 
   const handleLogin = () => {
-    // Clear previous errors
-    setError("");
-
     // Validate inputs
     if (!email.trim() || !password.trim()) {
-      setError("please fill in both fields!");
+      toast.error("Please fill in both fields.", { id: "admin-login-error" });
       return;
     }
 
     if (!isValidEmail(email.trim())) {
-      setError("please enter a valid email address!");
+      toast.error("Please enter a valid email address.", { id: "admin-login-error" });
       return;
     }
 
@@ -53,22 +50,20 @@ const AdminLogin = () => {
 
   // Handle successful login
   useEffect(() => {
-    console.log("loginData: ", loginData);
     if (isLoginSuccess && loginData) {
       // Store tokens
       localStorage.setItem("token", loginData.access_token);
       if (loginData.refresh_token) {
         localStorage.setItem("refresh_token", loginData.refresh_token);
       }
-      // Invalidate and refetch user query after tokens are stored
-      // This ensures the query runs with the new token
+      // Invalidate and refetch user query after tokens are stored, ensures the query runs with the new token
       queryClient.invalidateQueries({ queryKey: ["currentAdminUser"] });
+      toast.success("Logged in successfully!", { duration: 3000 });
     }
   }, [isLoginSuccess, loginData, queryClient]);
 
   // Handle user data after login
   useEffect(() => {
-    console.log("userData: ", userData);
     if (userData) {
       setUser(userData);
       // Redirect to admin page after user data is loaded
@@ -79,7 +74,9 @@ const AdminLogin = () => {
   // Handle login errors
   useEffect(() => {
     if (isLoginError && loginError) {
-      setError(loginError.error || "An error occurred. Please try again.");
+      toast.error(loginError.error || "An error occurred. Please try again.", {
+        id: "admin-login-error",
+      });
     }
   }, [isLoginError, loginError]);
 
@@ -92,13 +89,6 @@ const AdminLogin = () => {
         >
           NEEDLE
         </div>
-
-        {/* error message */}
-        {error && (
-          <p className="text-md text-thread-red text-center -mt-2 mb-2 font-semibold">
-            {error}
-          </p>
-        )}
 
         {/* inputs */}
         <form 
