@@ -1,5 +1,11 @@
 import RouteController from "./routes/routeController";
+import { Toaster } from "sonner";
 
 export default function App() {
-  return <RouteController />;
+  return (
+    <>
+      <RouteController />
+      <Toaster position="bottom-center" mobileOffset={60} richColors closeButton />
+    </>
+  );
 }
