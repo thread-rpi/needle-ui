@@ -5,7 +5,7 @@ export default function App() {
   return (
     <>
       <RouteController />
-      <Toaster position="bottom-center" mobileOffset={60} richColors closeButton />
+      <Toaster position="bottom-center" mobileOffset={80} richColors closeButton />
     </>
   );
 }
