@@ -1,8 +1,80 @@
 import ky, { HTTPError } from "ky";
+import { toast } from "sonner";
 import type { RefreshTokenResponse } from "../types/queryTypes";
+import { API_ROUTES } from "./apiRoutes";
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_TIMEOUT = 5000
+const AUTH_FAILURE_STATUSES = new Set([401, 403]);
+const MAX_NON_AUTH_REFRESH_FAILURES = 3;
+const FORCED_LOGOUT_TOAST_MESSAGE =
+  "Session ended after repeated refresh failures. Please sign in again.";
+let nonAuthRefreshFailures = 0;
+
+// clear stored auth from localStorage
+const clearStoredAuth = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("refresh_token");
+};
+
+const resetNonAuthRefreshFailures = () => {
+  nonAuthRefreshFailures = 0;
+};
+
+const handleNonAuthRefreshFailure = (error?: unknown) => {
+  nonAuthRefreshFailures += 1;
+  if (nonAuthRefreshFailures >= MAX_NON_AUTH_REFRESH_FAILURES) {
+    clearStoredAuth();
+    resetNonAuthRefreshFailures();
+    toast.error(FORCED_LOGOUT_TOAST_MESSAGE, { duration: 6000 });
+    return;
+  }
+
+  console.error(
+    `Token refresh failed due to non-auth error (attempt ${nonAuthRefreshFailures}/${MAX_NON_AUTH_REFRESH_FAILURES}).`,
+    error
+  );
+};
+
+// refresh with bearer token
+async function refreshWithBearerToken(refreshToken: string): Promise<RefreshTokenResponse> {
+  const response = await ky
+    .post(`${API_BASE_URL}/${API_ROUTES.refreshToken}`, {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+      timeout: API_TIMEOUT,
+    })
+    .json<{ data: RefreshTokenResponse }>();
+
+  return response.data;
+}
+
+// refresh with body token
+async function refreshWithBodyToken(refreshToken: string): Promise<RefreshTokenResponse> {
+  const response = await ky
+    .post(`${API_BASE_URL}/${API_ROUTES.refreshToken}`, {
+      json: { refresh_token: refreshToken },
+      timeout: API_TIMEOUT,
+    })
+    .json<{ data: RefreshTokenResponse }>();
+
+  return response.data;
+}
+
+// request token refresh handler
+async function requestTokenRefresh(refreshToken: string): Promise<RefreshTokenResponse> {
+  try {
+    // Try bearer-first for the migrated contract.
+    return await refreshWithBearerToken(refreshToken);
+  } catch (error) {
+    // Fallback supports older body-token refresh contract during migration.
+    if (error instanceof HTTPError && AUTH_FAILURE_STATUSES.has(error.response.status)) {
+      return refreshWithBodyToken(refreshToken);
+    }
+    throw error;
+  }
+}
 
 // ky api initalization
 const api = ky.create({
@@ -23,28 +95,23 @@ const api = ky.create({
     
         const refreshToken = localStorage.getItem("refresh_token");
         if (!refreshToken) {
-          // Clear tokens if refresh fails
-          localStorage.removeItem("token");
-          localStorage.removeItem("refresh_token");
+          // no valid recovery path without refresh token, clear auth
+          clearStoredAuth();
+          resetNonAuthRefreshFailures();
           return;
         }
     
         try {
-          // Use API_BASE_URL for refresh endpoint
-          const refreshResponse = await ky
-            .post(`${API_BASE_URL}/auth/refresh`, { 
-              json: { refresh_token: refreshToken },
-              timeout: API_TIMEOUT,
-            })
-            .json<{ data: RefreshTokenResponse }>();
-          
-          const refreshRes = refreshResponse.data;
+          // request token refresh
+          const refreshRes = await requestTokenRefresh(refreshToken);
           
           if (!refreshRes?.access_token) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refresh_token");
+            // count malformed refresh responses towards forced logout threshold
+            handleNonAuthRefreshFailure("Refresh response missing access_token.");
             return;
           }
+
+          resetNonAuthRefreshFailures();
     
           // Store new tokens (use consistent naming)
           localStorage.setItem("token", refreshRes.access_token);
@@ -63,10 +130,15 @@ const api = ky.create({
           
           // Return new response in place of original 401
           return api(retryReq, { retry: { limit: 0 } });
-        } catch {
-          // Refresh failed - clear tokens and redirect to login
-          localStorage.removeItem("token");
-          localStorage.removeItem("refresh_token");
+        } catch (error) {
+          if (error instanceof HTTPError && AUTH_FAILURE_STATUSES.has(error.response.status)) {
+            // only clear auth for true refresh authorization failures
+            clearStoredAuth();
+            resetNonAuthRefreshFailures();
+            return;
+          }
+          // network/contract failures only force logout after repeated attempts
+          handleNonAuthRefreshFailure(error);
           return;
         }
       }

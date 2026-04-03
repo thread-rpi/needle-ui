@@ -38,7 +38,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUserState(null);
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("refresh_token");
     }
   }, [userData, isError]);
 
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUserState(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("refresh_token");
   }, []);
 
   const value: AuthContextType = {
