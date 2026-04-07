@@ -76,3 +76,12 @@ export type PastEventsError = {
   status: number;
   error: string;
 };
+
+// Event details endpoint successful response
+export type EventDetailsResponse = PastEvent;
+
+// Event details endpoint error response
+export type EventDetailsError = {
+  status: number;
+  error: string;
+};
