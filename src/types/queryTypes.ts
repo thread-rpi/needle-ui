@@ -1,6 +1,7 @@
 import type { AdminUser } from "./adminTypes";
-import type { OverviewEvent } from "./eventTypes";
+import type { Event, OverviewEvent } from "./eventTypes";
 import type { PastEvent } from "./eventTypes";
+import type { Member } from "./memberTypes";
 
 // Health endpoint successful response
 export type HealthResponse = {
@@ -78,10 +79,19 @@ export type PastEventsError = {
 };
 
 // Event details endpoint successful response
-export type EventDetailsResponse = PastEvent;
+export type EventDetailsResponse = Event;
 
 // Event details endpoint error response
 export type EventDetailsError = {
+  status: number;
+  error: string;
+};
+
+// Member details endpoint successful response
+export type MemberDetailsResponse = Member;
+
+// Member details endpoint error response
+export type MemberDetailsError = {
   status: number;
   error: string;
 };

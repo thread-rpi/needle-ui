@@ -1,7 +1,8 @@
 import { useMutation, useQuery, type UseMutationResult, type UseQueryResult } from "@tanstack/react-query";
 import { apiGet, apiPost } from "./api";
-import { API_ROUTES, getEventDetailsRoute } from "./apiRoutes";
+import { API_ROUTES, getEventDetailsAPIRoute, getMemberDetailsAPIRoute } from "./apiRoutes";
 import type * as QueryTypes from "../types/queryTypes";
+import type { MemberIdNamePair } from "../types/memberTypes";
 
 
 // health endpoint request
@@ -90,7 +91,7 @@ export const useGetPastEvents = (): UseQueryResult<QueryTypes.PastEventsResponse
 
 // event details request
 async function getEventDetails(eventId: string): Promise<QueryTypes.EventDetailsResponse> {
-  return apiGet<QueryTypes.EventDetailsResponse, QueryTypes.EventDetailsError>({ endpoint: getEventDetailsRoute(eventId) });
+  return apiGet<QueryTypes.EventDetailsResponse, QueryTypes.EventDetailsError>({ endpoint: getEventDetailsAPIRoute(eventId) });
 }
 
 // event details endpoint hook
@@ -99,5 +100,52 @@ export const useGetEventDetails = (eventId: string): UseQueryResult<QueryTypes.E
     queryKey: ["eventDetails", eventId],
     queryFn: () => getEventDetails(eventId),
     enabled: !!eventId
+  });
+};
+
+// member details request
+async function getMemberDetails(memberId: string): Promise<QueryTypes.MemberDetailsResponse> {
+  return apiGet<QueryTypes.MemberDetailsResponse, QueryTypes.MemberDetailsError>({ endpoint: getMemberDetailsAPIRoute(memberId) });
+}
+
+// member details endpoint hook
+export const useGetMemberDetails = (memberId: string): UseQueryResult<QueryTypes.MemberDetailsResponse, QueryTypes.MemberDetailsError> => {
+  return useQuery<QueryTypes.MemberDetailsResponse, QueryTypes.MemberDetailsError>({
+    queryKey: ["memberDetails", memberId],
+    queryFn: () => getMemberDetails(memberId),
+    enabled: !!memberId
+  });
+};
+
+// helper function to check if an error is a member details error
+const isMemberDetailsError = (error: unknown): error is QueryTypes.MemberDetailsError => {
+  if (!error || typeof error !== "object") return false;
+  const candidate = error as Record<string, unknown>;
+  return typeof candidate.status === "number" && typeof candidate.error === "string";
+};
+
+// member id name pairs endpoint hook
+export const useGetMemberIdNamePairs = (
+  memberIds: string[],
+  enabled: boolean
+): UseQueryResult<MemberIdNamePair[], QueryTypes.MemberDetailsError> => {
+  return useQuery<MemberIdNamePair[], QueryTypes.MemberDetailsError>({
+    queryKey: ["memberIdNamePairs", memberIds],
+    enabled: enabled && memberIds.length > 0,
+    queryFn: async () => {
+      try {
+        const members = await Promise.all(memberIds.map((id) => getMemberDetails(id)));
+        return members.map((member) => ({
+          id: member.id,
+          name: member.display_name ?? member.name,
+        }));
+      } catch (error) {
+        if (isMemberDetailsError(error)) throw error;
+        throw {
+          status: 500,
+          error: "Failed to fetch member id/name pairs",
+        } satisfies QueryTypes.MemberDetailsError;
+      }
+    }
   });
 };

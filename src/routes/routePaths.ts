@@ -5,6 +5,7 @@ export const routes = {
   publications: '/publications',
   calendar: '/calendar',
   eventDetails: '/events/:eventId',
+  members: '/members/:memberId',
   health: '/health',
   login: '/login',
   adminRoot: '/admin',
@@ -12,7 +13,8 @@ export const routes = {
   adminImages: '/admin/images',
 };
 
-export const getEventDetailsRoute = (eventId: string): string => `/events/${eventId}`;
+export const getEventDetailsPageRoute = (eventId: string): string => `/events/${eventId}`;
+export const getMemberDetailsPageRoute = (memberId: string): string => `/members/${memberId}`;
 
 export const headerRoutes = [
   { label: "About Us", path: routes.about, offset: "9%" },

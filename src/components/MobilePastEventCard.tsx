@@ -1,7 +1,8 @@
 import type { EventType, PastEvent } from "../types/eventTypes";
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
-import { getEventDetailsRoute } from "../routes/routePaths";
+import { getEventDetailsPageRoute } from "../routes/routePaths";
+import { formatDate } from "../utils/formatter";
 
 // const PAST_EVENT_IMAGE_COMPRESSION_SUFFIX = "md.avif";
 const MOBILE_PAST_EVENT_IMAGE_COMPRESSION_SUFFIX = "og.jpg";
@@ -23,7 +24,7 @@ export const MobilePastEventCard = ({
 }: MobilePastEventCardProps) => {
   const isPlaceholder = id.startsWith("placeholder-");
   const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + image_path + MOBILE_PAST_EVENT_IMAGE_COMPRESSION_SUFFIX;
-  const detailsRoute = getEventDetailsRoute(id);
+  const detailsRoute = getEventDetailsPageRoute(id);
 
   return (
     <Link
@@ -52,11 +53,7 @@ export const MobilePastEventCard = ({
                 <div className="w-full h-full bg-black rounded-2xl animate-pulse" />
               )}
               <p className={`text-[10px] sm:text-xs opacity-45 font-weight-100 mt-[-0.12rem] truncate`}>
-                {new Date(date).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+                {formatDate(date)}
                 {` @ ${location}`}
               </p>
             </div>
