@@ -21,3 +21,5 @@ export type Image = {
   deleted_at?: string;
   deleted_by?: string;
 };
+
+export type EventImageDetails = Pick<Image, "id" | "path" | "caption" | "width" | "height" | "photographer_id" | "creative_director_id" | "model_ids" | "additional_personnel">;

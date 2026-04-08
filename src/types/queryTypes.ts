@@ -1,7 +1,7 @@
 import type { AdminUser } from "./adminTypes";
-import type { Event, OverviewEvent } from "./eventTypes";
-import type { PastEvent } from "./eventTypes";
+import type { Event, OverviewEvent, PastEvent } from "./eventTypes";
 import type { Member } from "./memberTypes";
+import type { Image } from "./imageTypes";
 
 // Health endpoint successful response
 export type HealthResponse = {
@@ -92,6 +92,15 @@ export type MemberDetailsResponse = Member;
 
 // Member details endpoint error response
 export type MemberDetailsError = {
+  status: number;
+  error: string;
+};
+
+// Image details endpoint successful response
+export type ImageDetailsResponse = Image;
+
+// Image details endpoint error response
+export type ImageDetailsError = {
   status: number;
   error: string;
 };

@@ -7,6 +7,7 @@ export const API_ROUTES = {
   pastEvents: 'events/past',
   eventDetails: 'events/{eventId}',
   memberDetails: 'members/{memberId}',
+  imageDetails: 'images/{imageId}',
 } as const;
 
 export const getEventDetailsAPIRoute = (eventId: string): string => {
@@ -15,4 +16,8 @@ export const getEventDetailsAPIRoute = (eventId: string): string => {
 
 export const getMemberDetailsAPIRoute = (memberId: string): string => {
   return API_ROUTES.memberDetails.replace('{memberId}', memberId) as typeof API_ROUTES.memberDetails;
+};
+
+export const getImageDetailsAPIRoute = (imageId: string): string => {
+  return API_ROUTES.imageDetails.replace('{imageId}', imageId) as typeof API_ROUTES.imageDetails;
 };

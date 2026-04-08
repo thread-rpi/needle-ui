@@ -1,8 +1,9 @@
 import { useMutation, useQuery, type UseMutationResult, type UseQueryResult } from "@tanstack/react-query";
 import { apiGet, apiPost } from "./api";
-import { API_ROUTES, getEventDetailsAPIRoute, getMemberDetailsAPIRoute } from "./apiRoutes";
+import { API_ROUTES, getEventDetailsAPIRoute, getMemberDetailsAPIRoute, getImageDetailsAPIRoute } from "./apiRoutes";
 import type * as QueryTypes from "../types/queryTypes";
 import type { MemberIdNamePair } from "../types/memberTypes";
+import type { EventImageDetails } from "../types/imageTypes";
 
 
 // health endpoint request
@@ -145,6 +146,61 @@ export const useGetMemberIdNamePairs = (
           status: 500,
           error: "Failed to fetch member id/name pairs",
         } satisfies QueryTypes.MemberDetailsError;
+      }
+    }
+  });
+};
+
+// image details request
+async function getImageDetails(imageId: string): Promise<QueryTypes.ImageDetailsResponse> {
+  return apiGet<QueryTypes.ImageDetailsResponse, QueryTypes.ImageDetailsError>({ endpoint: getImageDetailsAPIRoute(imageId) });
+}
+
+// image details endpoint hook
+export const useGetImageDetails = (imageId: string): UseQueryResult<QueryTypes.ImageDetailsResponse, QueryTypes.ImageDetailsError> => {
+  return useQuery<QueryTypes.ImageDetailsResponse, QueryTypes.ImageDetailsError>({
+    queryKey: ["imageDetails", imageId],
+    queryFn: () => getImageDetails(imageId),
+    enabled: !!imageId
+  });
+};
+
+
+// helper function to check if an error is a image details error
+const isEventImageDetailsError = (error: unknown): error is QueryTypes.ImageDetailsError => {
+  if (!error || typeof error !== "object") return false;
+  const candidate = error as Record<string, unknown>;
+  return typeof candidate.status === "number" && typeof candidate.error === "string";
+};
+
+// event image details request
+export const useGetEventImageDetails = (
+  imageIds: string[],
+  enabled: boolean
+): UseQueryResult<EventImageDetails[], QueryTypes.ImageDetailsError> => {
+  return useQuery<EventImageDetails[], QueryTypes.ImageDetailsError>({
+    queryKey: ["eventImageDetails", imageIds],
+    enabled: enabled && imageIds.length > 0,
+    queryFn: async () => {
+      try {
+        const images = await Promise.all(imageIds.map((id) => getImageDetails(id)));
+        return images.map((image) => ({
+          id: image.id,
+          path: image.path,
+          caption: image.caption,
+          width: image.width,
+          height: image.height,
+          photographer_id: image.photographer_id,
+          creative_director_id: image.creative_director_id,
+          model_ids: image.model_ids,
+          additional_personnel: image.additional_personnel,
+        }));
+      } catch (error) {
+        if (isEventImageDetailsError(error)) throw error;
+        throw {
+          status: 500,
+          error: "Failed to fetch event image details",
+        } satisfies QueryTypes.ImageDetailsError;
       }
     }
   });
