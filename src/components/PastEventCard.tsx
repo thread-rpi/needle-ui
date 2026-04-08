@@ -3,7 +3,8 @@ import type { EventType, PastEvent, PastEventCardSize } from "../types/eventType
 import { Icon } from "@iconify/react";
 import { useViewport } from "../contexts/useViewport";
 import { Link } from "react-router-dom";
-import { getEventDetailsRoute } from "../routes/routePaths";
+import { getEventDetailsPageRoute } from "../routes/routePaths";
+import { formatDate } from "../utils/formatter";
 
 // const PAST_EVENT_IMAGE_COMPRESSION_SUFFIX = "lg.avif";
 const PAST_EVENT_IMAGE_COMPRESSION_SUFFIX = "og.jpg";
@@ -76,7 +77,7 @@ export const PastEventCard = ({
   const isPlaceholder = id.startsWith("placeholder-");
   const coverImageUrl = import.meta.env.VITE_CLOUDFRONT_HOST + image_path + PAST_EVENT_IMAGE_COMPRESSION_SUFFIX;
   const cardStyle = cardStyleBySize[cardSize];
-  const detailsRoute = getEventDetailsRoute(id);
+  const detailsRoute = getEventDetailsPageRoute(id);
   return (
     <Link
       to={detailsRoute}
@@ -111,11 +112,7 @@ export const PastEventCard = ({
             <div className="flex flex-col justify-center items-start gap-0 overflow-clip text-white">
               <h3 className={`w-full font-bold truncate ${cardStyle.titleClass}`}>{title}</h3>
               <p className={`${cardStyle.dateLocationClass} text-[10px] opacity-45 font-weight-100 mt-[-0.15rem] truncate`}>
-                {new Date(date).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+                {formatDate(date)}
                 {` @ ${location}`}
               </p>
             </div>
