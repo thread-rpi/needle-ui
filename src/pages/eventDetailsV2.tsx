@@ -5,6 +5,7 @@ import EventDetailsContent from "../components/EventDetailsContent";
 import Loader from "../components/Loader";
 import { routes } from "../routes/routePaths";
 import type { Event } from "../types/eventTypes";
+import EventImageGallery from "../components/EventImageGallery";
 
 const EVENT_IMAGE_COMPRESSION_SUFFIX = "og.jpg";
 
@@ -12,6 +13,7 @@ export default function EventDetailsV2() {
   const navigate = useNavigate();
   const { eventId } = useParams<{ eventId: string }>();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isImageFocused, setIsImageFocused] = useState(false);
   const [eventDetailsContent, setEventDetailsContent] = useState<Event | null>(null);
   const {
     isSuccess: isEventDetailsSuccess,
@@ -117,6 +119,13 @@ export default function EventDetailsV2() {
             onToggleExpanded={() => setIsExpanded((prev) => !prev)}
           />
         </section>
+
+        <EventImageGallery 
+          imageData={eventDetailsContent?.image_ids ?? []} 
+          isDataReady={isEventDetailsSuccess && !!eventDetailsContent} 
+          isImageFocused={isImageFocused}
+          onToggleImageFocused={() => setIsImageFocused((prev) => !prev)}
+        />
       </div>
     </div>
   );
