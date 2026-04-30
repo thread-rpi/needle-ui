@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { motion, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetEventDetails } from "../api/queries";
 import EventDetailsContent from "../components/EventDetailsContent";
@@ -6,12 +7,16 @@ import Loader from "../components/Loader";
 import { routes } from "../routes/routePaths";
 import type { Event } from "../types/eventTypes";
 import EventImageGallery from "../components/EventImageGallery";
+import { useViewport } from "../contexts/useViewport";
 
 const EVENT_IMAGE_COMPRESSION_SUFFIX = "og.jpg";
 
 export default function EventDetailsV2() {
+  const { isMobile, width } = useViewport();
   const navigate = useNavigate();
   const { eventId } = useParams<{ eventId: string }>();
+  const heroStackRef = useRef<HTMLDivElement | null>(null);
+  const [transformRange, setTransformRange] = useState([1, 1]);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isImageFocused, setIsImageFocused] = useState(false);
   const [eventDetailsContent, setEventDetailsContent] = useState<Event | null>(null);
@@ -45,6 +50,35 @@ export default function EventDetailsV2() {
     };
   }, []);
 
+  // update the transform range based on the width of the viewport
+  useEffect(() => {
+    const updateTransformRange = () => {
+      // calculate the minimum multiplier based on the width of the viewport
+      // mobile = 0px
+      // > mobile && <=1440px width = 0.333 scaled from 768px to 1440px
+      // > 1440px width = 0.333
+      const minMultiplier = isMobile ? 0 : width > 1440 ? 0.39 : (width / 1440) * 0.39;
+      setTransformRange([window.innerHeight * minMultiplier, window.innerHeight * 0.95]);
+    };
+
+    updateTransformRange();
+    window.addEventListener("resize", updateTransformRange);
+
+    return () => window.removeEventListener("resize", updateTransformRange);
+  }, [isMobile, width]);
+
+  const { scrollY } = useScroll();
+  const smoothScrollY = useSpring(scrollY, {
+    mass: .05,
+    stiffness: 95,
+    damping: 40,
+  });
+  const heroScale = useTransform(smoothScrollY, transformRange, [1, 0.8], { clamp: true });
+  const heroBlur = useTransform(smoothScrollY, transformRange, [0, 35], { clamp: true });
+  const heroOpacity = useTransform(smoothScrollY, transformRange, [1, 0.5], { clamp: true });
+  const galleryTranslateY = useTransform(smoothScrollY, transformRange, [0, -window.innerHeight * 0.95], { clamp: true });
+  const heroFilter = useMotionTemplate`blur(${heroBlur}px)`;
+
   if (isEventDetailsLoading) {
     return <Loader />;
   }
@@ -71,61 +105,73 @@ export default function EventDetailsV2() {
     : undefined;
 
   return (
-    <div className="relative w-full h-full min-h-[60dvh] overflow-hidden flex justify-center text-white">
+    <div className="relative w-full h-full min-h-[60dvh] overflow-x-hidden flex justify-center text-white">
       {/* <div className="pointer-events-none absolute -left-32 -top-44 h-[420px] w-[680px] rounded-full border-[44px] border-thread-red/95" />
       <div className="pointer-events-none absolute -right-32 top-80 h-[460px] w-[760px] rounded-full border-[40px] border-[#678f3f]/80" />
       <div className="pointer-events-none absolute -left-44 bottom-20 h-[480px] w-[840px] rounded-full border-[38px] border-[#678f3f]/70" /> */}
 
       <div className="relative z-10 flex w-full max-w-[360px] sm:max-w-[760px] md:max-w-[910px] lg:max-w-[1400px] flex-col gap-4 px-3 sm:px-6 md:px-8">
-        {/* <button
-          type="button"
-          onClick={() => navigate(routes.root)}
-          className="w-max rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20 md:text-sm"
+        <motion.div
+          ref={heroStackRef}
+          className="relative z-10 flex flex-col gap-4"
+          style={{
+            scale: heroScale,
+            filter: heroFilter,
+            opacity: heroOpacity,
+            transformOrigin: "top center",
+            willChange: "transform, filter, opacity",
+          }}
         >
-          Back to events
-        </button> */}
+          <article
+            className={`relative w-full overflow-hidden rounded-[22px] bg-black shadow-2xl shadow-black/40 transition-[height,border-radius] 
+              duration-500 ease-out lg:transition-none lg:duration-0 lg:aspect-3/2 lg:w-full lg:h-full lg:max-w-none lg:max-h-none  ${
+              isExpanded ? "h-[clamp(198px,53vw,520px)] sm:h-[clamp(300px,58vw,640px)] md:h-[clamp(400px,62vw,850px)]" : "h-[72dvh] md:h-[80dvh] max-h-[560px] sm:max-h-[640px] md:max-h-[900px]"
+            }`}
+          >
+            <img
+              id="zoomed-cover-image"
+              src={coverImageUrl}
+              alt={eventDetails.title}
+              className={`absolute top-0 h-full w-auto max-w-none transition-[opacity,transform] duration-500 ease-in-out scale-102 
+                animate-delay-100 animate-event-cover-pan-mobile sm:animate-event-cover-pan-tablet lg:animate-none lg:opacity-0 lg:pointer-events-none motion-reduce:animate-none ${
+                !isExpanded ? "left-0 opacity-100" : "left-[5%] opacity-0"
+              }`}
+            />
+            <img
+              id="unzoomed-cover-image"
+              src={coverImageUrl}
+              alt={eventDetails.title}
+              className={`absolute inset-0 aspect-[3/2] h-full w-full object-cover object-center transition-[opacity] duration-500 
+                ease-in-out lg:opacity-100 lg:pointer-events-auto ${
+                isExpanded ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          </article>
 
-        <article
-          className={`relative w-full overflow-hidden rounded-[22px] bg-black shadow-2xl shadow-black/40 transition-[height,border-radius] 
-            duration-500 ease-out lg:transition-none lg:duration-0 lg:aspect-3/2 lg:w-full lg:h-full lg:max-w-none lg:max-h-none  ${
-            isExpanded ? "h-[clamp(198px,53vw,520px)] sm:h-[clamp(300px,58vw,640px)] md:h-[clamp(400px,62vw,850px)]" : "h-[72dvh] md:h-[80dvh] max-h-[560px] sm:max-h-[640px] md:max-h-[900px]"
-          }`}
+          <section className="w-full self-center">
+            <EventDetailsContent
+              content={eventDetailsContent}
+              isDetailsReady={isEventDetailsSuccess && !!eventDetailsContent}
+              isExpanded={isExpanded}
+              onToggleExpanded={() => setIsExpanded((prev) => !prev)}
+            />
+          </section>
+        </motion.div>
+
+        <motion.div
+          className="relative z-20"
+          style={{
+            y: galleryTranslateY,
+            willChange: "transform",
+          }}
         >
-          <img
-            id="zoomed-cover-image"
-            src={coverImageUrl}
-            alt={eventDetails.title}
-            className={`absolute top-0 h-full w-auto max-w-none transition-[opacity,transform] duration-500 ease-in-out scale-102 
-              animate-delay-100 animate-event-cover-pan-mobile sm:animate-event-cover-pan-tablet lg:animate-none lg:opacity-0 lg:pointer-events-none motion-reduce:animate-none ${
-              !isExpanded ? "left-0 opacity-100" : "left-[5%] opacity-0"
-            }`}
+          <EventImageGallery 
+            imageData={eventDetailsContent?.image_ids ?? []} 
+            isDataReady={isEventDetailsSuccess && !!eventDetailsContent} 
+            isImageFocused={isImageFocused}
+            onToggleImageFocused={() => setIsImageFocused((prev) => !prev)}
           />
-          <img
-            id="unzoomed-cover-image"
-            src={coverImageUrl}
-            alt={eventDetails.title}
-            className={`absolute inset-0 aspect-[3/2] h-full w-full object-cover object-center transition-[opacity] duration-500 
-              ease-in-out lg:opacity-100 lg:pointer-events-auto ${
-              isExpanded ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        </article>
-
-        <section className="w-full self-center">
-          <EventDetailsContent
-            content={eventDetailsContent}
-            isDetailsReady={isEventDetailsSuccess && !!eventDetailsContent}
-            isExpanded={isExpanded}
-            onToggleExpanded={() => setIsExpanded((prev) => !prev)}
-          />
-        </section>
-
-        <EventImageGallery 
-          imageData={eventDetailsContent?.image_ids ?? []} 
-          isDataReady={isEventDetailsSuccess && !!eventDetailsContent} 
-          isImageFocused={isImageFocused}
-          onToggleImageFocused={() => setIsImageFocused((prev) => !prev)}
-        />
+        </motion.div>
       </div>
     </div>
   );

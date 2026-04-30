@@ -48,14 +48,16 @@
   }
 }
 
-/* gabarito as base font globally */
+/* global base styles */
 @layer base {
   html,
   body,
   #root {
     min-height: 100%;
+    scroll-behavior: smooth;
   }
 
+  /* global html and body styles */
   html,
   body {
     margin: 0;
@@ -63,6 +65,8 @@
     transition: background-color 0.3s ease-in-out;
   }
 
+
+/* gabarito as base font globally */
   body {
     font-family: "Gabarito", sans-serif;
   }

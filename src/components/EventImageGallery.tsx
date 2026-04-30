@@ -30,7 +30,7 @@ export default function EventImageGallery({ imageData, isDataReady, isImageFocus
   }
 
   return (
-    <div className="w-full flex flex-col gap-4 sm:gap-7 lg:gap-9 xl:gap-12 pb-5">
+    <div className={`w-full flex flex-col gap-4 sm:gap-7 lg:gap-9 xl:gap-12 pb-5 transition-all duration-300 ${isImageFocused ? "brightness-110" : "brightness-100"}`}>
       {imageDetails.map((image) => (
         <Image key={image.id} image={image} onToggleImageFocused={onToggleImageFocused} />
       ))}
